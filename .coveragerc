@@ -1,0 +1,17 @@
+[run]
+omit =
+  __pycache__/*
+  *apps.py,
+  functional_tests/*
+  *migrations/*,
+  *settings*,
+  *test/*,
+  *tests/*
+  *urls.py,
+  *wsgi.py,
+  manage.py
+  *.tox*
+  conftest.py
+  setup.py
+  
+

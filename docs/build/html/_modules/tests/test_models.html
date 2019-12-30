@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>tests.test_models &#8212; Django mail template 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+
+
+ 
+<script type="text/javascript" src="../../templatebuiltins.js"></script>
+<script type="text/javascript">
+(function($) {
+    if (!django_template_builtins) {
+       // templatebuiltins.js missing, do nothing.
+       return;
+    }
+    $(document).ready(function() {
+        // Hyperlink Django template tags and filters
+        var base = "../../ref/templates/builtins.html";
+        if (base == "#") {
+            // Special case for builtins.html itself
+            base = "";
+        }
+        // Tags are keywords, class '.k'
+        $("div.highlight\\-html\\+django span.k").each(function(i, elem) {
+             var tagname = $(elem).text();
+             if ($.inArray(tagname, django_template_builtins.ttags) != -1) {
+                 var fragment = tagname.replace(/_/, '-');
+                 $(elem).html("<a href='" + base + "#" + fragment + "'>" + tagname + "</a>");
+             }
+        });
+        // Filters are functions, class '.nf'
+        $("div.highlight\\-html\\+django span.nf").each(function(i, elem) {
+             var filtername = $(elem).text();
+             if ($.inArray(filtername, django_template_builtins.tfilters) != -1) {
+                 var fragment = filtername.replace(/_/, '-');
+                 $(elem).html("<a href='" + base + "#" + fragment + "'>" + filtername + "</a>");
+             }
+        });
+    });
+})(jQuery);</script>
+
+  </head><body>
+
+    <div class="document">
+  <div id="custom-doc" class="yui-t6">
+    <div id="hd">
+      <h1><a href="../../index.html">Django mail template 0.0.1 documentation</a></h1>
+      <div id="global-nav">
+        <a title="Home page" href="../../index.html">Home</a>  |
+        <a title="Table of contents" href="../../contents.html">Table of contents</a>  |
+        <a title="Global index" href="../../genindex.html">Index</a>  |
+        <a title="Module index" href="../../py-modindex.html">Modules</a>
+      </div>
+      <div class="nav">
+    <a href="../index.html" title="Module code" accesskey="U">up</a></div>
+    </div>
+
+    <div id="bd">
+      <div id="yui-main">
+        <div class="yui-b">
+          <div class="yui-g" id="_modules-tests-test_models">
+            
+  <h1>Source code for tests.test_models</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: UTF-8 -*-</span>
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">TestCase</span> <span class="k">as</span> <span class="n">UnitTestCase</span>
+<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ValidationError</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">gettext</span> <span class="k">as</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django_mail_template.models</span> <span class="kn">import</span> <span class="n">MailTemplate</span><span class="p">,</span> <span class="n">MailAttachment</span>
+
+
+<div class="viewcode-block" id="TestAttachment"><a class="viewcode-back" href="../../reference.html#tests.test_models.TestAttachment">[docs]</a><span class="k">class</span> <span class="nc">TestAttachment</span><span class="p">(</span><span class="n">UnitTestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestAttachment.setUp"><a class="viewcode-back" href="../../reference.html#tests.test_models.TestAttachment.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attachment</span> <span class="o">=</span> <span class="n">MailAttachment</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">test_mail_attachment_data_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attachment</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_file_field_is_file_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="n">MailAttachment</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;file&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">FileField</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_file_field_help_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">expected_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;File to be attached to a mail template.&#39;</span><span class="p">)</span>
+        <span class="n">actual_text</span> <span class="o">=</span> <span class="n">MailAttachment</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;file&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">help_text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_text</span><span class="p">,</span> <span class="n">actual_text</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TestMailTemplate"><a class="viewcode-back" href="../../reference.html#tests.test_models.TestMailTemplate">[docs]</a><span class="nd">@pytest</span><span class="o">.</span><span class="n">mark</span><span class="o">.</span><span class="n">django_db</span>
+<span class="k">class</span> <span class="nc">TestMailTemplate</span><span class="p">(</span><span class="n">UnitTestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestMailTemplate.setUp"><a class="viewcode-back" href="../../reference.html#tests.test_models.TestMailTemplate.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span> <span class="o">=</span> <span class="n">MailTemplate</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s1">&#39;ID0001&#39;</span><span class="p">,</span>
+                                 <span class="n">sender</span><span class="o">=</span><span class="s1">&#39;a@b.com&#39;</span><span class="p">,</span>
+                                 <span class="n">subject</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;test subject&#39;</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">test_mail_data_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_required_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">full_clean</span><span class="p">()</span>  <span class="c1"># Should not fail</span>
+
+    <span class="k">def</span> <span class="nf">test_mail_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">expected_text</span> <span class="o">=</span> <span class="s1">&#39;ID0001&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_text</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">test_code_field_max_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="s1">&#39;ab01&#39;</span> <span class="o">*</span> <span class="mi">51</span>  <span class="c1"># 4 character * 51 == 204</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">full_clean</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="s1">&#39;ab01&#39;</span> <span class="o">*</span> <span class="mi">50</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">full_clean</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">test_code_field_is_unique</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">mail</span> <span class="o">=</span> <span class="n">MailTemplate</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s1">&#39;ID0001&#39;</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="s1">&#39;a@b.com&#39;</span><span class="p">,</span>
+                            <span class="n">subject</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;test subject&#39;</span><span class="p">))</span>
+        <span class="n">mail</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">mail</span> <span class="o">=</span> <span class="n">MailTemplate</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="s1">&#39;ID0001&#39;</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="s1">&#39;c@d.com&#39;</span><span class="p">,</span>
+                            <span class="n">subject</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;other subject&#39;</span><span class="p">))</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
+            <span class="n">mail</span><span class="o">.</span><span class="n">full_clean</span><span class="p">()</span>
+        <span class="n">MailTemplate</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">test_code_field_help_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">expected_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Unique code for mail template.&#39;</span><span class="p">)</span>
+        <span class="n">real_text</span> <span class="o">=</span> <span class="n">MailTemplate</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;code&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">help_text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_text</span><span class="p">,</span> <span class="n">real_text</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_destiny_field_max_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lots</span> <span class="o">=</span> <span class="s1">&#39;addresmail_test@mail.com,&#39;</span> <span class="o">*</span> <span class="mi">41</span>  <span class="c1"># 25 character * 41 == 1025</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">destiny</span> <span class="o">=</span> <span class="n">lots</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">full_clean</span><span class="p">()</span>
+        <span class="n">ok</span> <span class="o">=</span> <span class="s1">&#39;addresmail_test@mail.com,&#39;</span> <span class="o">*</span> <span class="mi">40</span>  <span class="c1"># 25 character * 40 = 1000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">destiny</span> <span class="o">=</span> <span class="n">ok</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">full_clean</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">test_destiny_field_help_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">expected_help_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Coma separated list with destiny address.&#39;</span><span class="p">)</span>
+        <span class="n">actual_help_text</span> <span class="o">=</span> <span class="n">MailTemplate</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;destiny&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">help_text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_help_text</span><span class="p">,</span> <span class="n">actual_help_text</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_destiny_field_do_validation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">destiny</span> <span class="o">=</span> <span class="s1">&#39;no-mail, simple@mail.com&#39;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">full_clean</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">test_sender_field_max_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">lots</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span> <span class="o">*</span> <span class="mi">250</span> <span class="o">+</span> <span class="s1">&#39;addresmail_test@mail.com&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">sender</span> <span class="o">=</span> <span class="n">lots</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">full_clean</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">sender</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span> <span class="o">*</span> <span class="mi">225</span> <span class="o">+</span> <span class="s1">&#39;addresmail_test@mail.com&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">full_clean</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">test_sender_field_help_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">expected_help_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Mail sender address.&#39;</span><span class="p">)</span>
+        <span class="n">actual_help_text</span> <span class="o">=</span> <span class="n">MailTemplate</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;sender&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">help_text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_help_text</span><span class="p">,</span> <span class="n">actual_help_text</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_subject_field_max_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">big_subject</span> <span class="o">=</span> <span class="s1">&#39;c&#39;</span> <span class="o">*</span> <span class="mi">140</span> <span class="o">+</span> <span class="s1">&#39;exceed&#39;</span>  <span class="c1"># 1 * 140 = 140 character max</span>
+        <span class="n">subject_ok</span> <span class="o">=</span> <span class="s1">&#39;c&#39;</span> <span class="o">*</span> <span class="mi">140</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="n">big_subject</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">full_clean</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">subject</span> <span class="o">=</span> <span class="n">subject_ok</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">full_clean</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">test_subject_field_help_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">expected_help</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Subject text for the mail. Context variable can be &#39;</span>
+                          <span class="s1">&#39;used.&#39;</span><span class="p">)</span>
+        <span class="n">actual_help_text</span> <span class="o">=</span> <span class="n">MailTemplate</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;subject&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">help_text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_help</span><span class="p">,</span> <span class="n">actual_help_text</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_body_field_max_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">big_body</span> <span class="o">=</span> <span class="s1">&#39;chars&#39;</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">+</span> <span class="s1">&#39;exceed&#39;</span>  <span class="c1"># 5 * 1000 = 5000 character max</span>
+        <span class="n">body_ok</span> <span class="o">=</span> <span class="s1">&#39;chars&#39;</span> <span class="o">*</span> <span class="mi">1000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">big_body</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">full_clean</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">body_ok</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mail</span><span class="o">.</span><span class="n">full_clean</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">test_body_field_help_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">expected_help_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;The content of the mail. Context variable can &#39;</span>
+                               <span class="s1">&#39;be used.&#39;</span><span class="p">)</span>
+        <span class="n">actual_help_text</span> <span class="o">=</span> <span class="n">MailTemplate</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">help_text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_help_text</span><span class="p">,</span> <span class="n">actual_help_text</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_attachments_field_help_text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">expected_text</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Select files to be sent with the mail.&#39;</span><span class="p">)</span>
+        <span class="n">actual_text</span> <span class="o">=</span> <span class="n">MailTemplate</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;attachments&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">help_text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">expected_text</span><span class="p">,</span> <span class="n">actual_text</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_attachments_field_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">attachments</span> <span class="o">=</span> <span class="n">MailTemplate</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;attachments&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attachments</span><span class="p">,</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">test_attachments_field_link_to_mail_attachment</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">attachments</span> <span class="o">=</span> <span class="n">MailTemplate</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;attachments&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">attachments</span><span class="o">.</span><span class="n">related_model</span> <span class="o">==</span> <span class="n">MailAttachment</span>
+
+    <span class="k">def</span> <span class="nf">test_attachments_field_related_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">expected_name</span> <span class="o">=</span> <span class="s1">&#39;file_to_mail&#39;</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">MailTemplate</span><span class="o">.</span><span class="n">_meta</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="s1">&#39;attachments&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">field</span><span class="o">.</span><span class="n">remote_field</span><span class="o">.</span><span class="n">related_name</span> <span class="o">==</span> <span class="n">expected_name</span></div>
+
+
+<div class="viewcode-block" id="TestSendMailTemplate"><a class="viewcode-back" href="../../reference.html#tests.test_models.TestSendMailTemplate">[docs]</a><span class="k">class</span> <span class="nc">TestSendMailTemplate</span><span class="p">(</span><span class="n">UnitTestCase</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">test_subject_replace_context_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">expected_subject</span> <span class="o">=</span> <span class="s1">&#39;Hello Test User&#39;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">test_body_replace_context_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">expected_subject</span> <span class="o">=</span> <span class="s1">&#39;Hello Test User&#39;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="TestConfiguration"><a class="viewcode-back" href="../../reference.html#tests.test_models.TestConfiguration">[docs]</a><span class="k">class</span> <span class="nc">TestConfiguration</span><span class="p">(</span><span class="n">UnitTestCase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Store dynamic configuration data used to set up django_mail working.</span>
+
+<span class="sd">    Builtin key process:</span>
+<span class="sd">    </span>
+<span class="sd">    * &#39;LOG_MAIL_ACTIVITY&#39;: A configuration with this value in process attribute</span>
+<span class="sd">      will configure django_mail to log mail activity.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="TestLogMailTemplate"><a class="viewcode-back" href="../../reference.html#tests.test_models.TestLogMailTemplate">[docs]</a><span class="k">class</span> <span class="nc">TestLogMailTemplate</span><span class="p">(</span><span class="n">UnitTestCase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Store mail activity.</span>
+
+<span class="sd">    Default implementation do not log mail activity. To log mail activity it is</span>
+<span class="sd">    required to create</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      
+        
+          <div class="yui-b" id="sidebar">
+            
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+              <h3>Last update:</h3>
+              <p class="topless">Dec 29, 2019</p>
+          </div>
+        
+      
+    </div>
+
+    <div id="ft">
+      <div class="nav">
+    <a href="../index.html" title="Module code" accesskey="U">up</a></div>
+    </div>
+  </div>
+
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>
