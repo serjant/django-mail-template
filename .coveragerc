@@ -13,5 +13,5 @@ omit =
   *.tox*
   conftest.py
   setup.py
-  
+
 
