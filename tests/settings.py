@@ -1,4 +1,4 @@
-
+# -*- coding: UTF-8 -*-
 SECRET_KEY = 'django-mail-template'
 
 INSTALLED_APPS = [

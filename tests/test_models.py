@@ -30,7 +30,7 @@ class TestMailTemplate(UnitTestCase):
 
     def setUp(self) -> None:
         self.mail = MailTemplate(code='ID0001',
-                                 sender='a@b.com',
+                                 from_email='a@b.com',
                                  subject=_('test subject'))
 
     def test_mail_data_model(self):
@@ -51,10 +51,10 @@ class TestMailTemplate(UnitTestCase):
         self.mail.full_clean()
 
     def test_code_field_is_unique(self):
-        mail = MailTemplate(code='ID0001', sender='a@b.com',
+        mail = MailTemplate(code='ID0001', to='a@b.com',
                             subject=_('test subject'))
         mail.save()
-        mail = MailTemplate(code='ID0001', sender='c@d.com',
+        mail = MailTemplate(code='ID0001', to='c@d.com',
                             subject=_('other subject'))
         with self.assertRaises(ValidationError):
             mail.full_clean()
@@ -65,36 +65,37 @@ class TestMailTemplate(UnitTestCase):
         real_text = MailTemplate._meta.get_field('code').help_text
         self.assertEqual(expected_text, real_text)
 
-    def test_destiny_field_max_length(self):
+    def test_to_field_max_length(self):
         lots = 'addresmail_test@mail.com,' * 41  # 25 character * 41 == 1025
-        self.mail.destiny = lots[:-1]
+        self.mail.to = lots[:-1]
         with self.assertRaises(ValidationError):
             self.mail.full_clean()
         ok = 'addresmail_test@mail.com,' * 40  # 25 character * 40 = 1000
-        self.mail.destiny = ok[:-1]
+        self.mail.to = ok[:-1]
         self.mail.full_clean()
 
-    def test_destiny_field_help_text(self):
-        expected_help_text = _('Coma separated list with destiny address.')
-        actual_help_text = MailTemplate._meta.get_field('destiny').help_text
+    def test_to_field_help_text(self):
+        expected_help_text = \
+            _('A list with destiny email addresses separated with coma.')
+        actual_help_text = MailTemplate._meta.get_field('to').help_text
         self.assertEqual(expected_help_text, actual_help_text)
 
-    def test_destiny_field_do_validation(self):
-        self.mail.destiny = 'no-mail, simple@mail.com'
+    def test_to_field_do_validation(self):
+        self.mail.to = 'no-mail, simple@mail.com'
         with self.assertRaises(ValidationError):
             self.mail.full_clean()
 
-    def test_sender_field_max_length(self):
+    def test_from_email_field_max_length(self):
         lots = 'a' * 250 + 'addresmail_test@mail.com'
-        self.mail.sender = lots[:-1],
+        self.mail.from_email = lots[:-1],
         with self.assertRaises(ValidationError):
             self.mail.full_clean()
-        self.mail.sender = 'a' * 225 + 'addresmail_test@mail.com'
+        self.mail.from_email = 'a' * 225 + 'addresmail_test@mail.com'
         self.mail.full_clean()
 
-    def test_sender_field_help_text(self):
-        expected_help_text = _('Mail sender address.')
-        actual_help_text = MailTemplate._meta.get_field('sender').help_text
+    def test_from_email_field_help_text(self):
+        expected_help_text = _("Sender's email address.")
+        actual_help_text = MailTemplate._meta.get_field('from_email').help_text
         self.assertEqual(expected_help_text, actual_help_text)
 
     def test_subject_field_max_length(self):
@@ -140,11 +141,6 @@ class TestMailTemplate(UnitTestCase):
         attachments = MailTemplate._meta.get_field('attachments')
         assert attachments.related_model == MailAttachment
 
-    def test_attachments_field_related_name(self):
-        expected_name = 'file_to_mail'
-        field = MailTemplate._meta.get_field('attachments')
-        assert field.remote_field.related_name == expected_name
-
 
 class TestSendMailTemplate(UnitTestCase):
 
@@ -154,6 +150,9 @@ class TestSendMailTemplate(UnitTestCase):
 
     def test_body_replace_context_variables(self):
         expected_subject = 'Hello Test User'
+        pass
+
+    def test_can_not_send_mail_if_model_is_not_saved(self):
         pass
 
 

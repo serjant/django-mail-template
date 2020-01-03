@@ -26,12 +26,12 @@ class MailTemplate(models.Model):
     code = models.CharField(max_length=200, unique=True,
                             help_text=_('Unique code for mail template.'))
     #: Field with destiny email address.
-    destiny = models.CharField(
+    to = models.CharField(
         max_length=1000, blank=True, null=True,
-        help_text=_('Coma separated list with destiny address.')
+        help_text=_('A list with destiny email addresses separated with coma.')
     )
     #: Field with sender (from) email address.
-    sender = models.EmailField(help_text='Mail sender address.')
+    from_email = models.EmailField(help_text="Sender's email address.")
     #: Subject for the mail. Context variable can be used
     subject = models.CharField(
         max_length=140,
@@ -42,7 +42,6 @@ class MailTemplate(models.Model):
     #: Field with the files attached to the mail.
     attachments = models.ManyToManyField(
         to=MailAttachment,
-        related_name='file_to_mail',
         blank=True, null=True,
         help_text=_('Select files to be sent with the mail.')
     )
@@ -51,11 +50,11 @@ class MailTemplate(models.Model):
         return '{}'.format(self.code)
 
     def clean(self):
-        if self.destiny:
-            destiny_field = forms.EmailField()
+        if self.to:
+            to_field = forms.EmailField()
             try:
-                return [destiny_field.clean(addr)
-                        for addr in self.destiny.split(',')]
+                return [to_field.clean(addr)
+                        for addr in self.to.split(',')]
             except forms.ValidationError:
                 raise forms.ValidationError(_('Enter a valid comma separated '
                                               'list of email addresses.'))
