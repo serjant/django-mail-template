@@ -47,3 +47,4 @@ class FunctionalDjangoMailTemplateTest(TestCase):
         assert email_2.body == 'Hello Bob Wellies!'
         assert email_2.from_email == 'test@domain.com'
 
+

@@ -4,7 +4,8 @@ from unittest import TestCase as UnitTestCase
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from django.db import models
-from django_mail_template.models import MailTemplate, MailAttachment
+from django_mail_template.models import (MailTemplate, MailAttachment,
+                                         Configuration)
 
 
 class TestAttachment(UnitTestCase):
@@ -142,39 +143,73 @@ class TestMailTemplate(UnitTestCase):
         assert attachments.related_model == MailAttachment
 
 
-class TestSendMailTemplate(UnitTestCase):
-
-    def test_subject_replace_context_variables(self):
-        expected_subject = 'Hello Test User'
-        pass
-
-    def test_body_replace_context_variables(self):
-        expected_subject = 'Hello Test User'
-        pass
-
-    def test_can_not_send_mail_if_model_is_not_saved(self):
-        pass
+# class TestAttachFile(UnitTestCase):
+#
+#     def test_can_attach_two_files_to_template(self):
+#         pass
+#
+#     def test_can_recover_files_from_template(self):
+#         pass
+#
+#     def test_can_delete_files_from_template(self):
+#         pass
+#
+#
+# class TestSendMailTemplate(UnitTestCase):
+#
+#     def test_subject_replace_context_variables(self):
+#         expected_subject = 'Hello Test User'
+#         pass
+#
+#     def test_body_replace_context_variables(self):
+#         expected_subject = 'Hello Test User'
+#         pass
+#
+#     def test_can_not_send_mail_if_model_is_not_saved(self):
+#         pass
 
 
 class TestConfiguration(UnitTestCase):
     """
-    Store dynamic configuration data used to set up django_mail working.
+    Store dynamic configuration data used to set up django_mail_template.
 
     Builtin key process:
 
     * 'LOG_MAIL_ACTIVITY': A configuration with this value in process attribute
-      will configure django_mail to log mail activity.
-
+      will configure django_mail_template to log mail activity.?????
     """
-    pass
+    def setUp(self) -> None:
+        self.configuration = Configuration(
+            process='PROCESS_ID'
+        )
+
+    def test_model_type_for_configuration(self):
+        assert isinstance(self.configuration, models.Model)
+
+    def test_process_field_type(self):
+        field = Configuration._meta.get_field('process')
+        assert isinstance(field, models.CharField)
+
+    def test_process_field_max_length(self):
+        big_data = 'chars' * 40 + 'exceed'
+        data_ok = 'chars' * 40
+        self.configuration.process = big_data
+        with self.assertRaises(ValidationError):
+            self.configuration.full_clean()
+        self.configuration.process = data_ok
+        self.configuration.full_clean()
+
+    # def test_configuration_string(self):
+    #     expected_text = _('PROCESS_ID - MAIL_TEMPLATE')
+    #     assert str(self.configuration) == expected_text
 
 
-class TestLogMailTemplate(UnitTestCase):
-    """
-    Store mail activity.
-
-    Default implementation do not log mail activity. To log mail activity it is
-    required to create
-    """
-
-    pass
+# class TestLogMailTemplate(UnitTestCase):
+#     """
+#     Store mail activity.?????
+#
+#     Default implementation do not log mail activity. To log mail activity it is
+#     required to create the configuration 'LOG_MAIL_ACTIVITY'.
+#     """
+#
+#     pass

@@ -63,3 +63,6 @@ class MailTemplate(models.Model):
     #     verbose_name = 'Mail template'
 
 
+class Configuration(models.Model):
+
+    process = models.CharField(max_length=200)
