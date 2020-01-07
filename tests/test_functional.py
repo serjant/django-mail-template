@@ -21,12 +21,12 @@ PEOPLE_FIXTURE = [
 class FunctionalDjangoMailTemplateTest(TestCase):
 
     def test_send_mail_to_people(self):
-        mail_ = MailTemplate(code='TestCode')
-        mail_.sender = 'test@domain.com'
+        mail_ = MailTemplate()
+        mail_.from_email = 'test@domain.com'
         mail_.subject = 'A test subject for {first_name}'
         mail_.body = 'Hello {first_name} {last_namte}!'
         for first_name, last_name, email in PEOPLE_FIXTURE:
-            mail_.destiny = [email]
+            mail_.to = [email]
             mail_.send(context={
                 'first_name': first_name,
                 'last_name': last_name
@@ -48,3 +48,9 @@ class FunctionalDjangoMailTemplateTest(TestCase):
         assert email_2.from_email == 'test@domain.com'
 
 
+# class FunctionalDjangoMailAttachmentsTest(TestCase):
+#     pass
+
+
+# class FunctionalDjangoConfigurationTest(TestCase):
+#     pass

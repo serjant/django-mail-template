@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext as _
 from django.db import models
 from email.utils import getaddresses, formataddr
@@ -21,10 +22,6 @@ class MailTemplate(models.Model):
     """
     Mail():
     """
-
-    #: Field holding the code to identify the mail configuration
-    code = models.CharField(max_length=200, unique=True,
-                            help_text=_('Unique code for mail template.'))
     #: Field with destiny email address.
     to = models.CharField(
         max_length=1000, blank=True, null=True,
@@ -47,7 +44,7 @@ class MailTemplate(models.Model):
     )
 
     def __str__(self):
-        return '{}'.format(self.code)
+        return '{}'.format(self.subject)
 
     def clean(self):
         if self.to:
@@ -59,10 +56,25 @@ class MailTemplate(models.Model):
                 raise forms.ValidationError(_('Enter a valid comma separated '
                                               'list of email addresses.'))
 
-    # class Meta:
-    #     verbose_name = 'Mail template'
-
 
 class Configuration(models.Model):
 
     process = models.CharField(max_length=200)
+
+    mail_template = models.ForeignKey(MailTemplate, on_delete=models.SET_NULL,
+                                      null=True, blank=True)
+
+    def __str__(self):
+        str_ = '{} - '.format(self.process)
+        if self.mail_template:
+            str_ += str(self.mail_template)
+        else:
+            str_ += _('No mail template')
+        return str_
+
+    @staticmethod
+    def get_mail_template(process):
+        try:
+            return Configuration.objects.get(process=process).mail_template
+        except ObjectDoesNotExist:
+            return None

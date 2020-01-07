@@ -30,8 +30,7 @@ class TestAttachment(UnitTestCase):
 class TestMailTemplate(UnitTestCase):
 
     def setUp(self) -> None:
-        self.mail = MailTemplate(code='ID0001',
-                                 from_email='a@b.com',
+        self.mail = MailTemplate(from_email='a@b.com',
                                  subject=_('test subject'))
 
     def test_mail_data_model(self):
@@ -41,30 +40,8 @@ class TestMailTemplate(UnitTestCase):
         self.mail.full_clean()  # Should not fail
 
     def test_mail_string(self):
-        expected_text = 'ID0001'
+        expected_text = _('test subject')
         self.assertEqual(expected_text, str(self.mail))
-
-    def test_code_field_max_length(self):
-        self.mail.code = 'ab01' * 51  # 4 character * 51 == 204
-        with self.assertRaises(ValidationError):
-            self.mail.full_clean()
-        self.mail.code = 'ab01' * 50
-        self.mail.full_clean()
-
-    def test_code_field_is_unique(self):
-        mail = MailTemplate(code='ID0001', to='a@b.com',
-                            subject=_('test subject'))
-        mail.save()
-        mail = MailTemplate(code='ID0001', to='c@d.com',
-                            subject=_('other subject'))
-        with self.assertRaises(ValidationError):
-            mail.full_clean()
-        MailTemplate.objects.all().delete()
-
-    def test_code_field_help_text(self):
-        expected_text = _('Unique code for mail template.')
-        real_text = MailTemplate._meta.get_field('code').help_text
-        self.assertEqual(expected_text, real_text)
 
     def test_to_field_max_length(self):
         lots = 'addresmail_test@mail.com,' * 41  # 25 character * 41 == 1025
@@ -166,6 +143,18 @@ class TestMailTemplate(UnitTestCase):
 #         pass
 #
 #     def test_can_not_send_mail_if_model_is_not_saved(self):
+#         """
+#         Needed to guarantee value in all required attribute to send a mail.
+#         """
+#         pass
+#
+#     def test_can_not_send_mail_without_required_attribute(self):
+#         """
+#         When sending an email a set of attributes will be required.
+#
+#         The required attributes are mainly dictated by django.core.mail.
+#         Check if this test should replace upper test (if model not saved).
+#         """
 #         pass
 
 
@@ -183,6 +172,9 @@ class TestConfiguration(UnitTestCase):
             process='PROCESS_ID'
         )
 
+    def test_required_fields(self):
+        self.configuration.full_clean()
+
     def test_model_type_for_configuration(self):
         assert isinstance(self.configuration, models.Model)
 
@@ -199,9 +191,55 @@ class TestConfiguration(UnitTestCase):
         self.configuration.process = data_ok
         self.configuration.full_clean()
 
-    # def test_configuration_string(self):
-    #     expected_text = _('PROCESS_ID - MAIL_TEMPLATE')
-    #     assert str(self.configuration) == expected_text
+    def test_mail_template_field_type(self):
+        field = Configuration._meta.get_field('mail_template')
+        assert isinstance(field, models.ForeignKey)
+
+    def test_mail_template_filed_point_to_right_data_model(self):
+        field = Configuration._meta.get_field('mail_template')
+        assert field.related_model == MailTemplate
+
+    def test_configuration_string_without_mail_template(self):
+        expected_text = 'PROCESS_ID - ' + _('No mail template')
+        assert str(self.configuration) == expected_text
+
+    def test_configuration_string_with_mail_template(self):
+        # Fixture
+        mail = MailTemplate.objects.create(
+            subject='test mail template subject',
+            from_email='a@b.com'
+        )
+        self.configuration.mail_template = mail
+        expected_text = _('PROCESS_ID - test mail template subject')
+        assert str(self.configuration) == expected_text
+
+
+class TestConfigurationBehavior(UnitTestCase):
+
+    def setUp(self) -> None:
+        self.configuration = Configuration(process='TestProcess')
+
+    def test_get_mail_template_return_none_without_mail_template(self):
+        assert Configuration.get_mail_template('') is None
+
+    def test_get_mail_template_return_correct_mail_template(self):
+        # Fixture
+        mail_yes = MailTemplate.objects.create(
+            subject='test mail template subject',
+            from_email='a@b.com'
+        )
+        mail_no = MailTemplate.objects.create(
+            subject='Bad mail template subject',
+            from_email='a@b.com'
+        )
+        configuration = Configuration(process='Fake_process')
+        configuration.mail_template = mail_no
+        configuration.save()
+        self.configuration.mail_template = mail_yes
+        self.configuration.save()
+
+        assert Configuration().get_mail_template('TestProcess') == mail_yes
+
 
 
 # class TestLogMailTemplate(UnitTestCase):
