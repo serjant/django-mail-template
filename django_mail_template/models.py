@@ -1,13 +1,11 @@
 # -*- coding: UTF-8 -*-
+from django.db import models
+from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import gettext as _
-from django.db import models
-from email.utils import getaddresses, formataddr
-
-from django import forms
+from django_mail_template.tools import replace_context_variable
 
 
-# Create your models here.
 class MailAttachment(models.Model):
     """
 
@@ -55,6 +53,13 @@ class MailTemplate(models.Model):
             except forms.ValidationError:
                 raise forms.ValidationError(_('Enter a valid comma separated '
                                               'list of email addresses.'))
+
+    def send(self, context):
+        subject = replace_context_variable(text=self.subject,
+                                           context_variable=context)
+        body = replace_context_variable(text=self.body,
+                                        context_variable=context)
+
 
 
 class Configuration(models.Model):

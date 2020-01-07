@@ -1,4 +1,6 @@
 # -*- coding: UTF-8 -*-
+from unittest.mock import patch, call
+
 import pytest
 from unittest import TestCase as UnitTestCase
 from django.core.exceptions import ValidationError
@@ -132,16 +134,38 @@ class TestMailTemplate(UnitTestCase):
 #         pass
 #
 #
-# class TestSendMailTemplate(UnitTestCase):
-#
-#     def test_subject_replace_context_variables(self):
-#         expected_subject = 'Hello Test User'
-#         pass
-#
-#     def test_body_replace_context_variables(self):
-#         expected_subject = 'Hello Test User'
-#         pass
-#
+class TestSendMailTemplate(UnitTestCase):
+
+    def setUp(self) -> None:
+        self.mail = MailTemplate(from_email='a@b.com',
+                                 subject=_('Hello {name}'))
+        self.mail.body = _('Test text using {name}')
+        self.mail.to = ['b@c.com']
+
+    @patch('django_mail_template.models.replace_context_variable')
+    def test_subject_replace_context_variables(
+            self, mock_replace_context_variable
+    ):
+        self.mail.send('fake-context')
+        assert call(text='Hello {name}', context_variable='fake-context') in \
+               mock_replace_context_variable.call_args_list
+
+    @patch('django_mail_template.models.replace_context_variable')
+    def test_body_replace_context_variables(
+            self, mock_replace_context_variable
+    ):
+        self.mail.send('fake-context')
+        assert call(text='Hello {name}', context_variable='fake-context') in \
+               mock_replace_context_variable.call_args_list
+
+    @patch('django_mail_template.models.replace_context_variable')
+    def test_replace_context_variables_was_called_twice(
+            self, mock_replace_context_variable
+    ):
+        self.mail.send('fake-context')
+        assert 2 == mock_replace_context_variable.call_count
+
+
 #     def test_can_not_send_mail_if_model_is_not_saved(self):
 #         """
 #         Needed to guarantee value in all required attribute to send a mail.
