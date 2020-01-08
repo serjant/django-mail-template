@@ -3,6 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+================================================
 Welcome to Django mail template's documentation!
 ================================================
 
@@ -11,12 +12,33 @@ Welcome to Django mail template's documentation!
    :caption: Contents:
 
    quickstart
+   advanced
    reference
 
 
+==================
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+
+
+===
+One
+===
+
+Two
+===
+
+Three
+-----
+
+Four
+~~~~
+
+Five
+^^^^
+

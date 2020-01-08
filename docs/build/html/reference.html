@@ -80,6 +80,21 @@
 <div class="section" id="module-django_mail_template.models">
 <span id="data-models"></span><h2>Data models<a class="headerlink" href="#module-django_mail_template.models" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
+<dt id="django_mail_template.models.Configuration">
+<em class="property">class </em><code class="sig-prename descclassname">django_mail_template.models.</code><code class="sig-name descname">Configuration</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">process</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/django_mail_template/models.html#Configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#django_mail_template.models.Configuration" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="exception">
+<dt id="django_mail_template.models.Configuration.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_mail_template.models.Configuration.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="django_mail_template.models.Configuration.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_mail_template.models.Configuration.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="django_mail_template.models.MailAttachment">
 <em class="property">class </em><code class="sig-prename descclassname">django_mail_template.models.</code><code class="sig-name descname">MailAttachment</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/django_mail_template/models.html#MailAttachment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#django_mail_template.models.MailAttachment" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="exception">
@@ -136,14 +151,8 @@ have a special-case association with the field defined by NON_FIELD_ERRORS.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="django_mail_template.models.MailTemplate.destiny">
-<code class="sig-name descname">destiny</code><a class="headerlink" href="#django_mail_template.models.MailTemplate.destiny" title="Permalink to this definition">¶</a></dt>
-<dd><p>Field with destiny email address.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="django_mail_template.models.MailTemplate.sender">
-<code class="sig-name descname">sender</code><a class="headerlink" href="#django_mail_template.models.MailTemplate.sender" title="Permalink to this definition">¶</a></dt>
+<dt id="django_mail_template.models.MailTemplate.from_email">
+<code class="sig-name descname">from_email</code><a class="headerlink" href="#django_mail_template.models.MailTemplate.from_email" title="Permalink to this definition">¶</a></dt>
 <dd><p>Field with sender (from) email address.</p>
 </dd></dl>
 
@@ -151,6 +160,12 @@ have a special-case association with the field defined by NON_FIELD_ERRORS.</p>
 <dt id="django_mail_template.models.MailTemplate.subject">
 <code class="sig-name descname">subject</code><a class="headerlink" href="#django_mail_template.models.MailTemplate.subject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Subject for the mail. Context variable can be used</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="django_mail_template.models.MailTemplate.to">
+<code class="sig-name descname">to</code><a class="headerlink" href="#django_mail_template.models.MailTemplate.to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Field with destiny email address.</p>
 </dd></dl>
 
 </dd></dl>
@@ -171,20 +186,18 @@ have a special-case association with the field defined by NON_FIELD_ERRORS.</p>
 <dl class="class">
 <dt id="tests.test_models.TestConfiguration">
 <em class="property">class </em><code class="sig-prename descclassname">tests.test_models.</code><code class="sig-name descname">TestConfiguration</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_models.html#TestConfiguration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_models.TestConfiguration" title="Permalink to this definition">¶</a></dt>
-<dd><p>Store dynamic configuration data used to set up django_mail working.</p>
+<dd><p>Store dynamic configuration data used to set up django_mail_template.</p>
 <p>Builtin key process:</p>
 <ul class="simple">
 <li><p>‘LOG_MAIL_ACTIVITY’: A configuration with this value in process attribute
-will configure django_mail to log mail activity.</p></li>
+will configure django_mail_template to log mail activity.?????</p></li>
 </ul>
+<dl class="method">
+<dt id="tests.test_models.TestConfiguration.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/tests/test_models.html#TestConfiguration.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_models.TestConfiguration.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
 </dd></dl>
 
-<dl class="class">
-<dt id="tests.test_models.TestLogMailTemplate">
-<em class="property">class </em><code class="sig-prename descclassname">tests.test_models.</code><code class="sig-name descname">TestLogMailTemplate</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_models.html#TestLogMailTemplate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_models.TestLogMailTemplate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Store mail activity.</p>
-<p>Default implementation do not log mail activity. To log mail activity it is
-required to create</p>
 </dd></dl>
 
 <dl class="class">
@@ -197,11 +210,6 @@ required to create</p>
 </dd></dl>
 
 </dd></dl>
-
-<dl class="class">
-<dt id="tests.test_models.TestSendMailTemplate">
-<em class="property">class </em><code class="sig-prename descclassname">tests.test_models.</code><code class="sig-name descname">TestSendMailTemplate</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_models.html#TestSendMailTemplate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_models.TestSendMailTemplate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </div>
 </div>
@@ -251,7 +259,7 @@ required to create</p>
         </div>
       </div>
               <h3>Last update:</h3>
-              <p class="topless">Dec 29, 2019</p>
+              <p class="topless">Jan 03, 2020</p>
           </div>
         
       

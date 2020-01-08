@@ -1,6 +1,6 @@
-===
-One
-===
+===========
+Quick start
+===========
 
 Two
 ===
@@ -13,5 +13,8 @@ Four
 
 Five
 ^^^^
+Any MailTemplate must have a unique code.
+Can not send email if the MailTemplate instance is not saved to DB.
+Is not necessary to have a configuration to use MailTemplate.
 
-Start here.
+

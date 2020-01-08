@@ -1,0 +1,44 @@
+========
+Advanced
+========
+
+Configuration
+=============
+
+Create a *Configuration* to map a *process name* with a MailTemplate let
+developer to create an algorithm that use an specific *process name* for
+sending emails and to change the used MailTemplate in run time without the
+need to change the code for just change mail content.
+
+
+Using process map in data models
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Is also possible to use MailTemplate with other data model to get more dynamic
+capabilities. For example, given a book model, adding a char field to keep the
+name of a process will let the users to change the process associated with an
+instance and with it the used MailTemplate.
+
+::
+
+    class Book(models.Model):
+        ...
+        process = models.CharField(max_length=200, null=True, blank=True)
+        ...
+
+The upper example will let the user to use admin GUI (if Book model is
+registered in admin) to change the process associated with each book. The
+next example show a possible code:
+
+::
+
+    ...
+    foreach book in Book.objects.all():
+        mail_template = get_mail_template(book.process)
+        if mail_template:
+            # Do something with mail_template
+            ...
+
+In upper example each instance (book) can use a different MailTemplate, and
+the map between each book and the MailTemplate can be changed at run time
+with admin GUI by changing the value of *process* field of a book.

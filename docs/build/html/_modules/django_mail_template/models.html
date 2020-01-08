@@ -101,12 +101,12 @@
     <span class="n">code</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">help_text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Unique code for mail template.&#39;</span><span class="p">))</span>
     <span class="c1">#: Field with destiny email address.</span>
-    <span class="n">destiny</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+    <span class="n">to</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
         <span class="n">max_length</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">help_text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Coma separated list with destiny address.&#39;</span><span class="p">)</span>
+        <span class="n">help_text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;A list with destiny email addresses separated with coma.&#39;</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="c1">#: Field with sender (from) email address.</span>
-    <span class="n">sender</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">help_text</span><span class="o">=</span><span class="s1">&#39;Mail sender address.&#39;</span><span class="p">)</span>
+    <span class="n">from_email</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">help_text</span><span class="o">=</span><span class="s2">&quot;Sender&#39;s email address.&quot;</span><span class="p">)</span>
     <span class="c1">#: Subject for the mail. Context variable can be used</span>
     <span class="n">subject</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
         <span class="n">max_length</span><span class="o">=</span><span class="mi">140</span><span class="p">,</span>
@@ -117,7 +117,6 @@
     <span class="c1">#: Field with the files attached to the mail.</span>
     <span class="n">attachments</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span>
         <span class="n">to</span><span class="o">=</span><span class="n">MailAttachment</span><span class="p">,</span>
-        <span class="n">related_name</span><span class="o">=</span><span class="s1">&#39;file_to_mail&#39;</span><span class="p">,</span>
         <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">help_text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Select files to be sent with the mail.&#39;</span><span class="p">)</span>
     <span class="p">)</span>
@@ -126,11 +125,11 @@
         <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MailTemplate.clean"><a class="viewcode-back" href="../../reference.html#django_mail_template.models.MailTemplate.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">destiny</span><span class="p">:</span>
-            <span class="n">destiny_field</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">EmailField</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">:</span>
+            <span class="n">to_field</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">EmailField</span><span class="p">()</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">return</span> <span class="p">[</span><span class="n">destiny_field</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
-                        <span class="k">for</span> <span class="n">addr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">destiny</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">to_field</span><span class="o">.</span><span class="n">clean</span><span class="p">(</span><span class="n">addr</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">addr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
             <span class="k">except</span> <span class="n">forms</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">forms</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Enter a valid comma separated &#39;</span>
                                               <span class="s1">&#39;list of email addresses.&#39;</span><span class="p">))</span></div></div>
@@ -139,6 +138,9 @@
     <span class="c1">#     verbose_name = &#39;Mail template&#39;</span>
 
 
+<div class="viewcode-block" id="Configuration"><a class="viewcode-back" href="../../reference.html#django_mail_template.models.Configuration">[docs]</a><span class="k">class</span> <span class="nc">Configuration</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+
+    <span class="n">process</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -163,7 +165,7 @@
         </div>
       </div>
               <h3>Last update:</h3>
-              <p class="topless">Dec 29, 2019</p>
+              <p class="topless">Jan 03, 2020</p>
           </div>
         
       

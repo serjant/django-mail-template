@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django_mail_template',
-    version='0.0.1',
+    version='0.0.2',
     packages=find_packages(),
     include_package_data=True,
     license='MIT License',
@@ -24,8 +24,8 @@ setup(
     author='Vicente Ramos Garcia',
     author_email='vramosga@gmail.com',
     classifiers=[
-        'Development Status :: 1 - Planning'
-        # 'Development Status :: 2 - Pre-Alpha'
+        # 'Development Status :: 1 - Planning'
+        'Development Status :: 2 - Pre-Alpha'
         # 'Development Status :: 3 - Alpha'
         # 'Development Status :: 4 - Beta',
         # 'Development Status :: 5 - Production/Stable'
@@ -43,7 +43,7 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
+        # 'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
