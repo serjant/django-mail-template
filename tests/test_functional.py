@@ -24,7 +24,7 @@ class FunctionalDjangoMailTemplateTest(TestCase):
         mail_ = MailTemplate()
         mail_.from_email = 'test@domain.com'
         mail_.subject = 'A test subject for {first_name}'
-        mail_.body = 'Hello {first_name} {last_namte}!'
+        mail_.body = 'Hello {first_name} {last_name}!'
         for first_name, last_name, email in PEOPLE_FIXTURE:
             mail_.to = [email]
             mail_.send(context={
@@ -36,13 +36,13 @@ class FunctionalDjangoMailTemplateTest(TestCase):
         email_2 = mail.outbox[1]
 
         # Assert content for first mail
-        assert email_1.to == 'ana@domain.com'
+        assert email_1.to == ['ana@domain.com']
         assert email_1.subject == 'A test subject for Ana'
         assert email_1.body == 'Hello Ana Smith!'
         assert email_1.from_email == 'test@domain.com'
 
         # Assert content for second mail
-        assert email_2.to == 'bob@domain.com'
+        assert email_2.to == ['bob@domain.com']
         assert email_2.subject == 'A test subject for Bob'
         assert email_2.body == 'Hello Bob Wellies!'
         assert email_2.from_email == 'test@domain.com'

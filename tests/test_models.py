@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
-from unittest.mock import patch, call
+from smtplib import SMTPException
+from unittest.mock import patch, call, Mock
 
 import pytest
 from unittest import TestCase as UnitTestCase
@@ -138,48 +139,88 @@ class TestSendMailTemplate(UnitTestCase):
 
     def setUp(self) -> None:
         self.mail = MailTemplate(from_email='a@b.com',
-                                 subject=_('Hello {name}'))
-        self.mail.body = _('Test text using {name}')
+                                 subject=_('Hello {test}'))
+        self.mail.body = _('Test text using {test}')
         self.mail.to = ['b@c.com']
+        self.context_data = {'test': 'test_value'}
 
     @patch('django_mail_template.models.replace_context_variable')
     def test_subject_replace_context_variables(
             self, mock_replace_context_variable
     ):
-        self.mail.send('fake-context')
-        assert call(text='Hello {name}', context_variable='fake-context') in \
-               mock_replace_context_variable.call_args_list
+        self.mail.send(self.context_data)
+        assert call(text='Hello {test}', context_variable=self.context_data) \
+               in mock_replace_context_variable.call_args_list
 
     @patch('django_mail_template.models.replace_context_variable')
     def test_body_replace_context_variables(
             self, mock_replace_context_variable
     ):
-        self.mail.send('fake-context')
-        assert call(text='Hello {name}', context_variable='fake-context') in \
-               mock_replace_context_variable.call_args_list
+        self.mail.send(self.context_data)
+        assert call(text='Hello {test}', context_variable=self.context_data) \
+               in mock_replace_context_variable.call_args_list
 
     @patch('django_mail_template.models.replace_context_variable')
     def test_replace_context_variables_was_called_twice(
             self, mock_replace_context_variable
     ):
-        self.mail.send('fake-context')
+        self.mail.send(self.context_data)
         assert 2 == mock_replace_context_variable.call_count
 
+    def test_send_return_false_and_by_could_not_proceed_if_parameter_is_wrong(
+            self
+    ):
+        assert (False, _('The argument for send method must be a mapping.'))\
+               == self.mail.send('fake-context')
 
-#     def test_can_not_send_mail_if_model_is_not_saved(self):
-#         """
-#         Needed to guarantee value in all required attribute to send a mail.
-#         """
-#         pass
-#
-#     def test_can_not_send_mail_without_required_attribute(self):
-#         """
-#         When sending an email a set of attributes will be required.
-#
-#         The required attributes are mainly dictated by django.core.mail.
-#         Check if this test should replace upper test (if model not saved).
-#         """
-#         pass
+    @patch('django_mail_template.models.send_mail')
+    def test_can_send_mail_without_context(
+            self, mock_django_mail
+    ):
+        self.mail.send()
+        assert 1 == mock_django_mail.call_count
+
+    @patch('django_mail_template.models.send_mail')
+    def test_can_not_send_mail_without_required_attributes_valid_context(
+            self, mock_django_mail
+    ):
+        self.mail.send('fake-context')
+        assert 0 == mock_django_mail.call_count
+
+    @patch('django_mail_template.models.send_mail')
+    def test_can_can_catch_send_mail_exceptions(
+            self, mock_django_mail
+    ):
+        e = SMTPException()
+        e.strerror = _('fake-fail')
+        mock_django_mail.side_effect = e
+
+        result, message = self.mail.send()
+        assert not result
+        assert message == _('fake-fail')
+
+    @patch('django_mail_template.models.send_mail')
+    def test_send_mail_return_no_mail_sent(
+            self, mock_django_mail
+    ):
+        mock_django_mail.return_value = 0
+        result, message = self.mail.send()
+        assert not result
+        assert message == _('Mail not sent.')
+
+    @patch('django_mail_template.models.send_mail')
+    def test_send_mail_return_mail_sent(
+            self, mock_django_mail
+    ):
+        mock_django_mail.return_value = 1
+        result, message = self.mail.send()
+        assert result
+        assert message == _('Mail sent.')
+
+    # def test_django_mail_is_called_with_correct_attachments(
+    #         self
+    # ):
+    #     pass
 
 
 class TestConfiguration(UnitTestCase):
