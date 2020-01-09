@@ -7,26 +7,7 @@ from unittest import TestCase as UnitTestCase
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from django.db import models
-from django_mail_template.models import (MailTemplate, MailAttachment,
-                                         Configuration)
-
-
-class TestAttachment(UnitTestCase):
-
-    def setUp(self) -> None:
-        self.attachment = MailAttachment()
-
-    def test_mail_attachment_data_model(self):
-        assert isinstance(self.attachment, models.Model)
-
-    def test_file_field_is_file_type(self):
-        file = MailAttachment._meta.get_field('file')
-        assert isinstance(file, models.FileField)
-
-    def test_file_field_help_text(self):
-        expected_text = _('File to be attached to a mail template.')
-        actual_text = MailAttachment._meta.get_field('file').help_text
-        self.assertEqual(expected_text, actual_text)
+from django_mail_template.models import (MailTemplate, Configuration)
 
 
 @pytest.mark.django_db
@@ -109,32 +90,7 @@ class TestMailTemplate(UnitTestCase):
         actual_help_text = MailTemplate._meta.get_field('body').help_text
         self.assertEqual(expected_help_text, actual_help_text)
 
-    def test_attachments_field_help_text(self):
-        expected_text = _('Select files to be sent with the mail.')
-        actual_text = MailTemplate._meta.get_field('attachments').help_text
-        self.assertEqual(expected_text, actual_text)
 
-    def test_attachments_field_type(self):
-        attachments = MailTemplate._meta.get_field('attachments')
-        assert isinstance(attachments, models.ManyToManyField)
-
-    def test_attachments_field_link_to_mail_attachment(self):
-        attachments = MailTemplate._meta.get_field('attachments')
-        assert attachments.related_model == MailAttachment
-
-
-# class TestAttachFile(UnitTestCase):
-#
-#     def test_can_attach_two_files_to_template(self):
-#         pass
-#
-#     def test_can_recover_files_from_template(self):
-#         pass
-#
-#     def test_can_delete_files_from_template(self):
-#         pass
-#
-#
 class TestSendMailTemplate(UnitTestCase):
 
     def setUp(self) -> None:
@@ -216,11 +172,6 @@ class TestSendMailTemplate(UnitTestCase):
         result, message = self.mail.send()
         assert result
         assert message == _('Mail sent.')
-
-    # def test_django_mail_is_called_with_correct_attachments(
-    #         self
-    # ):
-    #     pass
 
 
 class TestConfiguration(UnitTestCase):
@@ -304,15 +255,3 @@ class TestConfigurationBehavior(UnitTestCase):
         self.configuration.save()
 
         assert Configuration().get_mail_template('TestProcess') == mail_yes
-
-
-
-# class TestLogMailTemplate(UnitTestCase):
-#     """
-#     Store mail activity.?????
-#
-#     Default implementation do not log mail activity. To log mail activity it is
-#     required to create the configuration 'LOG_MAIL_ACTIVITY'.
-#     """
-#
-#     pass

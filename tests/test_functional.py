@@ -1,12 +1,4 @@
 # -*- coding: UTF-8 -*-
-"""
-Use case:
-Django mail template is used for sending greeting to a set of people.
-
-Requirement to test:
- * The size of the set of people must be at least of two.
- * The mail should take at least two attachments.
-"""
 from django.core import mail
 from django.test import TestCase
 
@@ -46,10 +38,6 @@ class FunctionalDjangoMailTemplateTest(TestCase):
         assert email_2.subject == 'A test subject for Bob'
         assert email_2.body == 'Hello Bob Wellies!'
         assert email_2.from_email == 'test@domain.com'
-
-
-# class FunctionalDjangoMailAttachmentsTest(TestCase):
-#     pass
 
 
 # class FunctionalDjangoConfigurationTest(TestCase):

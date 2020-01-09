@@ -9,16 +9,6 @@ from django.utils.translation import gettext as _
 from django_mail_template.tools import replace_context_variable
 
 
-class MailAttachment(models.Model):
-    """
-
-    """
-    #: File to be attached to mail.
-    file = models.FileField(
-        help_text=_('File to be attached to a mail template.')
-    )
-
-
 class MailTemplate(models.Model):
     """
     Mail():
@@ -37,12 +27,6 @@ class MailTemplate(models.Model):
     body = models.CharField(
         blank=True, null=True, max_length=5000,
         help_text=_('The content of the mail. Context variable can be used.'))
-    #: Field with the files attached to the mail.
-    attachments = models.ManyToManyField(
-        to=MailAttachment,
-        blank=True, null=True,
-        help_text=_('Select files to be sent with the mail.')
-    )
 
     def __str__(self):
         return '{}'.format(self.subject)
