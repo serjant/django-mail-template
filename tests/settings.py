@@ -2,8 +2,13 @@
 SECRET_KEY = 'django-mail-template'
 
 INSTALLED_APPS = [
-    'django_mail_template',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django_mail_template.apps.DjangoMailTemplateConfig',
 ]
+
 
 DATABASES = {
     'default': {
@@ -11,8 +16,6 @@ DATABASES = {
         'NAME': ':memory:',
     }
 }
-
-ROOT_URLCONF = 'tests.urls'
 
 import os
 BASE_DIR = os.path.dirname(

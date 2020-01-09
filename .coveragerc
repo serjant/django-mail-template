@@ -1,7 +1,6 @@
 [run]
 omit =
   __pycache__/*
-  *apps.py,
   functional_tests/*
   *migrations/*,
   *settings*,

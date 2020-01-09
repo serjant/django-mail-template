@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 
 
-class DjangoMailConfig(AppConfig):
-    name = 'django_mail'
+class DjangoMailTemplateConfig(AppConfig):
+    name = 'django_mail_template'
+    verbose_name = u'Django Mail Template'

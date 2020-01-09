@@ -1,3 +1,5 @@
 from django.contrib import admin
+from django_mail_template.models import MailTemplate, Configuration
 
-# Register your models here.
+admin.site.register(MailTemplate)
+admin.site.register(Configuration)
