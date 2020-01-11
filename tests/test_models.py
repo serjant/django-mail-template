@@ -75,20 +75,15 @@ class TestMailTemplate(UnitTestCase):
         actual_help_text = MailTemplate._meta.get_field('subject').help_text
         self.assertEqual(expected_help, actual_help_text)
 
-    def test_body_field_max_length(self):
-        big_body = 'chars' * 1000 + 'exceed'  # 5 * 1000 = 5000 character max
-        body_ok = 'chars' * 1000
-        self.mail.body = big_body
-        with self.assertRaises(ValidationError):
-            self.mail.full_clean()
-        self.mail.body = body_ok
-        self.mail.full_clean()
-
     def test_body_field_help_text(self):
         expected_help_text = _('The content of the mail. Context variable can '
                                'be used.')
         actual_help_text = MailTemplate._meta.get_field('body').help_text
         self.assertEqual(expected_help_text, actual_help_text)
+
+    def test_body_field_type(self):
+        field = MailTemplate._meta.get_field('body')
+        assert isinstance(field, models.TextField)
 
 
 class TestSendMailTemplate(UnitTestCase):

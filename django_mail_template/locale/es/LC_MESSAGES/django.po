@@ -1,0 +1,49 @@
+# -*- coding: UTF-8 -*-
+# Django mail template spanish translation.
+# This file is distributed under the same license as the PACKAGE package.
+# Vicente Ramos García <vramosga@gmail.com>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-11 18:21-0300\n"
+"Last-Translator: Vicente Ramos Garcia <vramosga@gmail.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: models.py:19
+msgid "A list with destiny email addresses separated with coma."
+msgstr "Una lista con las direcciones de destino separadas por coma"
+
+#: models.py:26
+msgid "Subject text for the mail. Context variable can be used."
+msgstr "Asunto para el correo. Variables de contexto pueden ser usadas."
+
+#: models.py:29
+msgid "The content of the mail. Context variable can be used."
+msgstr "Contenido para el correo. Variables de contexto pueden ser usadas."
+
+#: models.py:41
+msgid "Enter a valid comma separated list of email addresses."
+msgstr "Ingrese una lista válida de direcciones de email separadas por coma."
+
+#: models.py:67
+msgid "The argument for send method must be a mapping."
+msgstr "El argumento para el método send debe ser un mapeo."
+
+#: models.py:81
+msgid "Mail not sent."
+msgstr "Correo no enviado."
+
+#: models.py:83
+msgid "Mail sent."
+msgstr "Correo enviado."
+
+#: models.py:100
+msgid "No mail template"
+msgstr "Sin plantilla de correo"

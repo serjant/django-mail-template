@@ -24,7 +24,7 @@ class MailTemplate(models.Model):
     subject = models.CharField(
         max_length=140,
         help_text=_('Subject text for the mail. Context variable can be used.'))
-    body = models.CharField(
+    body = models.TextField(
         blank=True, null=True, max_length=5000,
         help_text=_('The content of the mail. Context variable can be used.'))
 

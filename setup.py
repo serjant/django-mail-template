@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django_mail_template',
-    version='0.0.2',
+    version='0.1.1',
     packages=find_packages(),
     include_package_data=True,
     license='MIT License',
@@ -25,9 +25,9 @@ setup(
     author_email='vramosga@gmail.com',
     classifiers=[
         # 'Development Status :: 1 - Planning'
-        'Development Status :: 2 - Pre-Alpha'
+        # 'Development Status :: 2 - Pre-Alpha'
         # 'Development Status :: 3 - Alpha'
-        # 'Development Status :: 4 - Beta',
+        'Development Status :: 4 - Beta',
         # 'Development Status :: 5 - Production/Stable'
         # 'Development Status :: 6 - Mature'
         # 'Development Status :: 7 - Inactive'
