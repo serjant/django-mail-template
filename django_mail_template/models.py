@@ -6,6 +6,7 @@ from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext
 from django_mail_template.tools import replace_context_variable
 
 
@@ -97,7 +98,7 @@ class Configuration(models.Model):
         if self.mail_template:
             str_ += str(self.mail_template)
         else:
-            str_ += _('No mail template')
+            str_ += gettext('No mail template')
         return str_
 
     @staticmethod
