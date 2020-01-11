@@ -5,7 +5,7 @@ from django.db import models
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 from django_mail_template.tools import replace_context_variable
 
 
@@ -19,7 +19,7 @@ class MailTemplate(models.Model):
         help_text=_('A list with destiny email addresses separated with coma.')
     )
     #: Field with sender (from) email address.
-    from_email = models.EmailField(help_text="Sender's email address.")
+    from_email = models.EmailField(help_text=_("Sender's email address."))
     #: Subject for the mail. Context variable can be used
     subject = models.CharField(
         max_length=140,

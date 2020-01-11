@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-11 18:21-0300\n"
+"POT-Creation-Date: 2020-01-11 19:20-0300\n"
 "Last-Translator: Vicente Ramos Garcia <vramosga@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,11 @@ msgstr ""
 
 #: models.py:19
 msgid "A list with destiny email addresses separated with coma."
-msgstr "Una lista con las direcciones de destino separadas por coma"
+msgstr "Una lista con las direcciones de destino separadas por coma."
+
+#: models.py:22
+msgid "Sender's email address."
+msgstr "Dirección de correo del emisor."
 
 #: models.py:26
 msgid "Subject text for the mail. Context variable can be used."
