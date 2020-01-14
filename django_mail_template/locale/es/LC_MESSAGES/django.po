@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.1.1\n"
+"Project-Id-Version: 0.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-11 19:20-0300\n"
+"POT-Creation-Date: 2020-01-14 10:30-0300\n"
 "Last-Translator: Vicente Ramos Garcia <vramosga@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -16,38 +16,58 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: models.py:19
+#: apps.py:7
+msgid "Django Mail Template"
+msgstr "Plantilla de correo para Django"
+
+#: models.py:20
 msgid "A list with destiny email addresses separated with coma."
 msgstr "Una lista con las direcciones de destino separadas por coma."
 
-#: models.py:22
+#: models.py:23
 msgid "Sender's email address."
 msgstr "Dirección de correo del emisor."
 
-#: models.py:26
+#: models.py:27
 msgid "Subject text for the mail. Context variable can be used."
 msgstr "Asunto para el correo. Variables de contexto pueden ser usadas."
 
-#: models.py:29
+#: models.py:30
 msgid "The content of the mail. Context variable can be used."
 msgstr "Contenido para el correo. Variables de contexto pueden ser usadas."
 
-#: models.py:41
+#: models.py:33
+msgid "Mail Template"
+msgstr "Plantilla de correo"
+
+#: models.py:34
+msgid "Mails Templates"
+msgstr "Plantillas de correos"
+
+#: models.py:46
 msgid "Enter a valid comma separated list of email addresses."
 msgstr "Ingrese una lista válida de direcciones de email separadas por coma."
 
-#: models.py:67
+#: models.py:72
 msgid "The argument for send method must be a mapping."
 msgstr "El argumento para el método send debe ser un mapeo."
 
-#: models.py:81
+#: models.py:86
 msgid "Mail not sent."
 msgstr "Correo no enviado."
 
-#: models.py:83
+#: models.py:88
 msgid "Mail sent."
 msgstr "Correo enviado."
 
-#: models.py:100
+#: models.py:101
+msgid "Configuration"
+msgstr "Configuración"
+
+#: models.py:102
+msgid "Configurations"
+msgstr "Configuraciones"
+
+#: models.py:109
 msgid "No mail template"
 msgstr "Sin plantilla de correo"

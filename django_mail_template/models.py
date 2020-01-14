@@ -29,6 +29,10 @@ class MailTemplate(models.Model):
         blank=True, null=True, max_length=5000,
         help_text=_('The content of the mail. Context variable can be used.'))
 
+    class Meta:
+        verbose_name = _('Mail Template')
+        verbose_name_plural = _('Mails Templates')
+
     def __str__(self):
         return '{}'.format(self.subject)
 
@@ -92,6 +96,10 @@ class Configuration(models.Model):
 
     mail_template = models.ForeignKey(MailTemplate, on_delete=models.SET_NULL,
                                       null=True, blank=True)
+
+    class Meta:
+        verbose_name = _('Configuration')
+        verbose_name_plural = _('Configurations')
 
     def __str__(self):
         str_ = '{} - '.format(self.process)
