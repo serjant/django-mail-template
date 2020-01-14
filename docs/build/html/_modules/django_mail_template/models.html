@@ -74,55 +74,42 @@
             
   <h1>Source code for django_mail_template.models</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: UTF-8 -*-</span>
-<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">gettext</span> <span class="k">as</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">smtplib</span> <span class="kn">import</span> <span class="n">SMTPException</span>
+
 <span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
-<span class="kn">from</span> <span class="nn">email.utils</span> <span class="kn">import</span> <span class="n">getaddresses</span><span class="p">,</span> <span class="n">formataddr</span>
-
 <span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
-
-
-<span class="c1"># Create your models here.</span>
-<div class="viewcode-block" id="MailAttachment"><a class="viewcode-back" href="../../reference.html#django_mail_template.models.MailAttachment">[docs]</a><span class="k">class</span> <span class="nc">MailAttachment</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1">#: File to be attached to mail.</span>
-    <span class="n">file</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FileField</span><span class="p">(</span>
-        <span class="n">help_text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;File to be attached to a mail template.&#39;</span><span class="p">)</span>
-    <span class="p">)</span></div>
+<span class="kn">from</span> <span class="nn">django.core.exceptions</span> <span class="kn">import</span> <span class="n">ObjectDoesNotExist</span>
+<span class="kn">from</span> <span class="nn">django.core.mail</span> <span class="kn">import</span> <span class="n">send_mail</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">gettext_lazy</span> <span class="k">as</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">gettext</span>
+<span class="kn">from</span> <span class="nn">django_mail_template.tools</span> <span class="kn">import</span> <span class="n">replace_context_variable</span>
 
 
 <div class="viewcode-block" id="MailTemplate"><a class="viewcode-back" href="../../reference.html#django_mail_template.models.MailTemplate">[docs]</a><span class="k">class</span> <span class="nc">MailTemplate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Mail():</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1">#: Field holding the code to identify the mail configuration</span>
-    <span class="n">code</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">help_text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Unique code for mail template.&#39;</span><span class="p">))</span>
     <span class="c1">#: Field with destiny email address.</span>
     <span class="n">to</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
         <span class="n">max_length</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">help_text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;A list with destiny email addresses separated with coma.&#39;</span><span class="p">)</span>
     <span class="p">)</span>
     <span class="c1">#: Field with sender (from) email address.</span>
-    <span class="n">from_email</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">help_text</span><span class="o">=</span><span class="s2">&quot;Sender&#39;s email address.&quot;</span><span class="p">)</span>
+    <span class="n">from_email</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">help_text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s2">&quot;Sender&#39;s email address.&quot;</span><span class="p">))</span>
     <span class="c1">#: Subject for the mail. Context variable can be used</span>
     <span class="n">subject</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
         <span class="n">max_length</span><span class="o">=</span><span class="mi">140</span><span class="p">,</span>
         <span class="n">help_text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Subject text for the mail. Context variable can be used.&#39;</span><span class="p">))</span>
-    <span class="n">body</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span>
         <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
         <span class="n">help_text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;The content of the mail. Context variable can be used.&#39;</span><span class="p">))</span>
-    <span class="c1">#: Field with the files attached to the mail.</span>
-    <span class="n">attachments</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ManyToManyField</span><span class="p">(</span>
-        <span class="n">to</span><span class="o">=</span><span class="n">MailAttachment</span><span class="p">,</span>
-        <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">help_text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Select files to be sent with the mail.&#39;</span><span class="p">)</span>
-    <span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Mail Template&#39;</span><span class="p">)</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Mails Templates&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">)</span>
 
 <div class="viewcode-block" id="MailTemplate.clean"><a class="viewcode-back" href="../../reference.html#django_mail_template.models.MailTemplate.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="p">:</span>
@@ -132,15 +119,77 @@
                         <span class="k">for</span> <span class="n">addr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">to</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
             <span class="k">except</span> <span class="n">forms</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">forms</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Enter a valid comma separated &#39;</span>
-                                              <span class="s1">&#39;list of email addresses.&#39;</span><span class="p">))</span></div></div>
+                                              <span class="s1">&#39;list of email addresses.&#39;</span><span class="p">))</span></div>
 
-    <span class="c1"># class Meta:</span>
-    <span class="c1">#     verbose_name = &#39;Mail template&#39;</span>
+<div class="viewcode-block" id="MailTemplate.send"><a class="viewcode-back" href="../../reference.html#django_mail_template.models.MailTemplate.send">[docs]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        When sending an email a set of attributes will be required.</span>
+
+<span class="sd">        The required attributes are mainly dictated by django.core.mail</span>
+<span class="sd">        used to send mail:</span>
+<span class="sd">        * Message or body.</span>
+<span class="sd">        * Subject.</span>
+<span class="sd">        * Recipients list or to.</span>
+<span class="sd">        * From email</span>
+
+<span class="sd">        :param context: A dictionary with context variables to be used with</span>
+<span class="sd">                        the subject and the message.</span>
+<span class="sd">        :return: A tuple (result, message) where result is a boolean indicating</span>
+<span class="sd">                 if mail could be sent or not. An a message in case the mail</span>
+<span class="sd">                 could not be sent the message will be the reason. This could</span>
+<span class="sd">                 have future uses if logging is implemented.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">subject</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subject</span>
+        <span class="n">body</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">body</span>
+        <span class="k">if</span> <span class="n">context</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;The argument for send method must be a mapping.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">subject</span> <span class="o">=</span> <span class="n">replace_context_variable</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">subject</span><span class="p">,</span>
+                                               <span class="n">context_variable</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
+            <span class="n">body</span> <span class="o">=</span> <span class="n">replace_context_variable</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">body</span><span class="p">,</span>
+                                            <span class="n">context_variable</span><span class="o">=</span><span class="n">context</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">send_mail</span><span class="p">(</span>
+                <span class="n">subject</span><span class="o">=</span><span class="n">subject</span><span class="p">,</span>
+                <span class="n">message</span><span class="o">=</span><span class="n">body</span><span class="p">,</span>
+                <span class="n">from_email</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">from_email</span><span class="p">,</span>
+                <span class="n">recipient_list</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">to</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Mail not sent.&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">result</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Mail sent.&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">SMTPException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">strerror</span></div></div>
 
 
 <div class="viewcode-block" id="Configuration"><a class="viewcode-back" href="../../reference.html#django_mail_template.models.Configuration">[docs]</a><span class="k">class</span> <span class="nc">Configuration</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
 
-    <span class="n">process</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span></div>
+    <span class="n">process</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+    <span class="n">mail_template</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">MailTemplate</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">SET_NULL</span><span class="p">,</span>
+                                      <span class="n">null</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Configuration&#39;</span><span class="p">)</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Configurations&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">str_</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> - &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mail_template</span><span class="p">:</span>
+            <span class="n">str_</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mail_template</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">str_</span> <span class="o">+=</span> <span class="n">gettext</span><span class="p">(</span><span class="s1">&#39;No mail template&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">str_</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_mail_template</span><span class="p">(</span><span class="n">process</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Configuration</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">process</span><span class="o">=</span><span class="n">process</span><span class="p">)</span><span class="o">.</span><span class="n">mail_template</span>
+        <span class="k">except</span> <span class="n">ObjectDoesNotExist</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
 </pre></div>
 
           </div>
@@ -165,7 +214,7 @@
         </div>
       </div>
               <h3>Last update:</h3>
-              <p class="topless">Jan 03, 2020</p>
+              <p class="topless">Jan 14, 2020</p>
           </div>
         
       

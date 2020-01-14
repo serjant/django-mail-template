@@ -14,7 +14,7 @@
     <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="One" href="quickstart.html" />
+    <link rel="prev" title="Advanced" href="advanced.html" />
 
 
 
@@ -65,7 +65,7 @@
         <a title="Module index" href="py-modindex.html">Modules</a>
       </div>
       <div class="nav">
-    &laquo; <a href="quickstart.html" title="One">previous</a>
+    &laquo; <a href="advanced.html" title="Advanced">previous</a>
      |
     <a title="Django mail template 0.0.1 documentation" href="index.html" accesskey="U">up</a></div>
     </div>
@@ -81,7 +81,7 @@
 <span id="data-models"></span><h2>Data models<a class="headerlink" href="#module-django_mail_template.models" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="django_mail_template.models.Configuration">
-<em class="property">class </em><code class="sig-prename descclassname">django_mail_template.models.</code><code class="sig-name descname">Configuration</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">process</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/django_mail_template/models.html#Configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#django_mail_template.models.Configuration" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">django_mail_template.models.</code><code class="sig-name descname">Configuration</code><span class="sig-paren">(</span><em class="sig-param">id</em>, <em class="sig-param">process</em>, <em class="sig-param">mail_template</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/django_mail_template/models.html#Configuration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#django_mail_template.models.Configuration" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="exception">
 <dt id="django_mail_template.models.Configuration.DoesNotExist">
 <em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_mail_template.models.Configuration.DoesNotExist" title="Permalink to this definition">¶</a></dt>
@@ -91,27 +91,6 @@
 <dt id="django_mail_template.models.Configuration.MultipleObjectsReturned">
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_mail_template.models.Configuration.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="django_mail_template.models.MailAttachment">
-<em class="property">class </em><code class="sig-prename descclassname">django_mail_template.models.</code><code class="sig-name descname">MailAttachment</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/django_mail_template/models.html#MailAttachment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#django_mail_template.models.MailAttachment" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="exception">
-<dt id="django_mail_template.models.MailAttachment.DoesNotExist">
-<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#django_mail_template.models.MailAttachment.DoesNotExist" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="exception">
-<dt id="django_mail_template.models.MailAttachment.MultipleObjectsReturned">
-<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_mail_template.models.MailAttachment.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="attribute">
-<dt id="django_mail_template.models.MailAttachment.file">
-<code class="sig-name descname">file</code><a class="headerlink" href="#django_mail_template.models.MailAttachment.file" title="Permalink to this definition">¶</a></dt>
-<dd><p>File to be attached to mail.</p>
-</dd></dl>
 
 </dd></dl>
 
@@ -129,12 +108,6 @@
 <em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#django_mail_template.models.MailTemplate.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="django_mail_template.models.MailTemplate.attachments">
-<code class="sig-name descname">attachments</code><a class="headerlink" href="#django_mail_template.models.MailTemplate.attachments" title="Permalink to this definition">¶</a></dt>
-<dd><p>Field with the files attached to the mail.</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="django_mail_template.models.MailTemplate.clean">
 <code class="sig-name descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/django_mail_template/models.html#MailTemplate.clean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#django_mail_template.models.MailTemplate.clean" title="Permalink to this definition">¶</a></dt>
@@ -145,15 +118,33 @@ have a special-case association with the field defined by NON_FIELD_ERRORS.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="django_mail_template.models.MailTemplate.code">
-<code class="sig-name descname">code</code><a class="headerlink" href="#django_mail_template.models.MailTemplate.code" title="Permalink to this definition">¶</a></dt>
-<dd><p>Field holding the code to identify the mail configuration</p>
-</dd></dl>
-
-<dl class="attribute">
 <dt id="django_mail_template.models.MailTemplate.from_email">
 <code class="sig-name descname">from_email</code><a class="headerlink" href="#django_mail_template.models.MailTemplate.from_email" title="Permalink to this definition">¶</a></dt>
 <dd><p>Field with sender (from) email address.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="django_mail_template.models.MailTemplate.send">
+<code class="sig-name descname">send</code><span class="sig-paren">(</span><em class="sig-param">context=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/django_mail_template/models.html#MailTemplate.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#django_mail_template.models.MailTemplate.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>When sending an email a set of attributes will be required.</p>
+<p>The required attributes are mainly dictated by django.core.mail
+used to send mail:
+* Message or body.
+* Subject.
+* Recipients list or to.
+* From email</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>context</strong> – A dictionary with context variables to be used with
+the subject and the message.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple (result, message) where result is a boolean indicating
+if mail could be sent or not. An a message in case the mail
+could not be sent the message will be the reason. This could
+have future uses if logging is implemented.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -173,17 +164,6 @@ have a special-case association with the field defined by NON_FIELD_ERRORS.</p>
 <div class="section" id="module-tests.test_models">
 <span id="tests"></span><h3>Tests<a class="headerlink" href="#module-tests.test_models" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
-<dt id="tests.test_models.TestAttachment">
-<em class="property">class </em><code class="sig-prename descclassname">tests.test_models.</code><code class="sig-name descname">TestAttachment</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_models.html#TestAttachment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_models.TestAttachment" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="tests.test_models.TestAttachment.setUp">
-<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/tests/test_models.html#TestAttachment.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_models.TestAttachment.setUp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hook method for setting up the test fixture before exercising it.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
 <dt id="tests.test_models.TestConfiguration">
 <em class="property">class </em><code class="sig-prename descclassname">tests.test_models.</code><code class="sig-name descname">TestConfiguration</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_models.html#TestConfiguration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_models.TestConfiguration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Store dynamic configuration data used to set up django_mail_template.</p>
@@ -201,11 +181,33 @@ will configure django_mail_template to log mail activity.?????</p></li>
 </dd></dl>
 
 <dl class="class">
+<dt id="tests.test_models.TestConfigurationBehavior">
+<em class="property">class </em><code class="sig-prename descclassname">tests.test_models.</code><code class="sig-name descname">TestConfigurationBehavior</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_models.html#TestConfigurationBehavior"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_models.TestConfigurationBehavior" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="tests.test_models.TestConfigurationBehavior.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/tests/test_models.html#TestConfigurationBehavior.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_models.TestConfigurationBehavior.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="tests.test_models.TestMailTemplate">
 <em class="property">class </em><code class="sig-prename descclassname">tests.test_models.</code><code class="sig-name descname">TestMailTemplate</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_models.html#TestMailTemplate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_models.TestMailTemplate" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="tests.test_models.TestMailTemplate.setUp">
 <code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/tests/test_models.html#TestMailTemplate.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_models.TestMailTemplate.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method for setting up the test fixture before exercising it.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="tests.test_models.TestSendMailTemplate">
+<em class="property">class </em><code class="sig-prename descclassname">tests.test_models.</code><code class="sig-name descname">TestSendMailTemplate</code><span class="sig-paren">(</span><em class="sig-param">methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests/test_models.html#TestSendMailTemplate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_models.TestSendMailTemplate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="tests.test_models.TestSendMailTemplate.setUp">
+<code class="sig-name descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="_modules/tests/test_models.html#TestSendMailTemplate.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_models.TestSendMailTemplate.setUp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hook method for setting up the test fixture before exercising it.</p>
 </dd></dl>
 
@@ -237,8 +239,8 @@ will configure django_mail_template to log mail activity.?????</p></li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="quickstart.html"
-                        title="previous chapter">One</a></p>
+  <p class="topless"><a href="advanced.html"
+                        title="previous chapter">Advanced</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -259,7 +261,7 @@ will configure django_mail_template to log mail activity.?????</p></li>
         </div>
       </div>
               <h3>Last update:</h3>
-              <p class="topless">Jan 03, 2020</p>
+              <p class="topless">Jan 14, 2020</p>
           </div>
         
       
@@ -267,7 +269,7 @@ will configure django_mail_template to log mail activity.?????</p></li>
 
     <div id="ft">
       <div class="nav">
-    &laquo; <a href="quickstart.html" title="One">previous</a>
+    &laquo; <a href="advanced.html" title="Advanced">previous</a>
      |
     <a title="Django mail template 0.0.1 documentation" href="index.html" accesskey="U">up</a></div>
     </div>

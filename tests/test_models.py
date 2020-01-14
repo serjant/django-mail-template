@@ -29,11 +29,11 @@ class TestMailTemplate(UnitTestCase):
 
     def test_mail_template_verbose_name(self):
         verbose_name = MailTemplate._meta.verbose_name
-        assert verbose_name == _('Django Mail Template')
+        assert verbose_name == _('Mail Template')
 
     def test_mail_template_plural_name(self):
         verbose_name = MailTemplate._meta.verbose_name_plural
-        assert verbose_name == _('Django Mails Templates')
+        assert verbose_name == _('Mails Templates')
 
     def test_to_field_max_length(self):
         lots = 'addresmail_test@mail.com,' * 41  # 25 character * 41 == 1025

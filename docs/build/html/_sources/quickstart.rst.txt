@@ -1,6 +1,81 @@
+====================
+Django Mail Template
+====================
+
 ===========
 Quick start
 ===========
+
+Description
+===========
+
+1) Provide "basic template" features by replacing  in
+*subject* and *message body*
+
+
+any variable given to send method as a context
+dictionary.
+
+2) Configuration model. With it code can be tied to *created* process name.
+For example, given an algorithm that send mails to all people in directory,
+if DMT is used, such algorithm can use the MailTemplate given by certain
+``Configuration('process_name')``. Now the same algorithm can be used to send
+christmas or new year regards by just changing at admin GUI the MailTemplate
+linked to that Configuration.
+
+Also a Configuration (indirect) or MailTemplate (direct) can be used as part
+of new models, read more about it in advanced.
+
+
+Requirements
+------------
+
+1) Django's email docs specify needed configuration for sending mail with
+django.core.mail (`Django email`_).
+
+2) ``django_mail_template`` uses *Django admin interface* and because of
+this it have the same requirements than it. This can be checked in the
+official documentation: `Django admin site`_.
+
+.. _`Django email`: https://docs.djangoproject.com/en/dev/topics/email/
+
+.. _`Django admin site`: https://docs.djangoproject.com/en/dev/ref/contrib/admin/
+
+
+Quick start
+===========
+
+
+Installation and configuration
+------------------------------
+
+1. Install ``django_mail_template`` from pypi:
+
+::
+
+   pip install django-mail-template
+
+2. Add *'django_mail_template'* to your INSTALLED_APPS:
+
+::
+
+   INSTALLED_APPS = [
+       ...
+       'django_mail_template',
+   ]
+
+
+3. Run migrations:
+::
+
+    python manage.py migrate
+
+
+Use Django Mail Template
+========================
+
+
+
 
 Two
 ===
@@ -13,6 +88,8 @@ Four
 
 Five
 ^^^^
+
+
 Any MailTemplate must have a unique code.
 Can not send email if the MailTemplate instance is not saved to DB.
 Is not necessary to have a configuration to use MailTemplate.

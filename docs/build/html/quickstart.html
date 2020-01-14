@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Quick start &#8212; Django mail template 0.0.1 documentation</title>
+    <title>Django Mail Template &#8212; Django mail template 0.0.1 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -78,8 +78,62 @@
         <div class="yui-b">
           <div class="yui-g" id="quickstart">
             
-  <div class="section" id="quick-start">
+  <div class="section" id="django-mail-template">
+<h1>Django Mail Template<a class="headerlink" href="#django-mail-template" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="quick-start">
 <h1>Quick start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="description">
+<h2>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h2>
+<p>1) Provide “basic template” features by replacing  in
+<em>subject</em> and <em>message body</em></p>
+<p>any variable given to send method as a context
+dictionary.</p>
+<p>2) Configuration model. With it code can be tied to <em>created</em> process name.
+For example, given an algorithm that send mails to all people in directory,
+if DMT is used, such algorithm can use the MailTemplate given by certain
+<code class="docutils literal notranslate"><span class="pre">Configuration('process_name')</span></code>. Now the same algorithm can be used to send
+christmas or new year regards by just changing at admin GUI the MailTemplate
+linked to that Configuration.</p>
+<p>Also a Configuration (indirect) or MailTemplate (direct) can be used as part
+of new models, read more about it in advanced.</p>
+<div class="section" id="requirements">
+<h3>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h3>
+<p>1) Django’s email docs specify needed configuration for sending mail with
+django.core.mail (<a class="reference external" href="https://docs.djangoproject.com/en/dev/topics/email/">Django email</a>).</p>
+<p>2) <code class="docutils literal notranslate"><span class="pre">django_mail_template</span></code> uses <em>Django admin interface</em> and because of
+this it have the same requirements than it. This can be checked in the
+official documentation: <a class="reference external" href="https://docs.djangoproject.com/en/dev/ref/contrib/admin/">Django admin site</a>.</p>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>Quick start<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installation-and-configuration">
+<h3>Installation and configuration<a class="headerlink" href="#installation-and-configuration" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">django_mail_template</span></code> from pypi:</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">django</span><span class="o">-</span><span class="n">mail</span><span class="o">-</span><span class="n">template</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Add <em>‘django_mail_template’</em> to your INSTALLED_APPS:</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="o">...</span>
+    <span class="s1">&#39;django_mail_template&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>3. Run migrations:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">manage</span><span class="o">.</span><span class="n">py</span> <span class="n">migrate</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="use-django-mail-template">
+<h2>Use Django Mail Template<a class="headerlink" href="#use-django-mail-template" title="Permalink to this headline">¶</a></h2>
+</div>
 <div class="section" id="two">
 <h2>Two<a class="headerlink" href="#two" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="three">
@@ -109,7 +163,17 @@ Is not necessary to have a configuration to use MailTemplate.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Quick start</a><ul>
+<li><a class="reference internal" href="#">Django Mail Template</a></li>
+<li><a class="reference internal" href="#quick-start">Quick start</a><ul>
+<li><a class="reference internal" href="#description">Description</a><ul>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id1">Quick start</a><ul>
+<li><a class="reference internal" href="#installation-and-configuration">Installation and configuration</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#use-django-mail-template">Use Django Mail Template</a></li>
 <li><a class="reference internal" href="#two">Two</a><ul>
 <li><a class="reference internal" href="#three">Three</a><ul>
 <li><a class="reference internal" href="#four">Four</a><ul>
@@ -150,7 +214,7 @@ Is not necessary to have a configuration to use MailTemplate.</p>
         </div>
       </div>
               <h3>Last update:</h3>
-              <p class="topless">Jan 03, 2020</p>
+              <p class="topless">Jan 14, 2020</p>
           </div>
         
       
