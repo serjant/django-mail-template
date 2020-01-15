@@ -150,13 +150,12 @@ class TestSendMailTemplate(UnitTestCase):
     def test_can_can_catch_send_mail_exceptions(
             self, mock_django_mail
     ):
-        e = SMTPException()
-        e.strerror = _('fake-fail')
+        e = SMTPException('fake-fail')
         mock_django_mail.side_effect = e
 
         result, message = self.mail.send()
         assert not result
-        assert message == _('fake-fail')
+        assert message == str(e)
 
     @patch('django_mail_template.models.send_mail')
     def test_send_mail_return_no_mail_sent(

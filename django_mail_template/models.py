@@ -87,7 +87,7 @@ class MailTemplate(models.Model):
             elif result == 1:
                 return True, _('Mail sent.')
         except SMTPException as e:
-            return False, e.strerror
+            return False, str(e)
 
 
 class Configuration(models.Model):
