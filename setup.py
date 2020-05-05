@@ -10,14 +10,14 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django_mail_template',
-    version='0.1.2',
+    version='0.1.3',
     packages=find_packages(),
     include_package_data=True,
     license='MIT License',
     description='Application for creating mails templates with context '
                 'variables. There is a double mapping between a mail template '
                 'and process configuration so is possible to change the used '
-                'mail template in a process at run time with admin GUI',
+                'mail template in a process at run time.',
     long_description=README,
     long_description_content_type='text/markdown',
     url='',
@@ -27,8 +27,8 @@ setup(
         # 'Development Status :: 1 - Planning'
         # 'Development Status :: 2 - Pre-Alpha'
         # 'Development Status :: 3 - Alpha'
-        'Development Status :: 4 - Beta',
-        # 'Development Status :: 5 - Production/Stable'
+        # 'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable'
         # 'Development Status :: 6 - Mature'
         # 'Development Status :: 7 - Inactive'
         'Environment :: Web Environment',

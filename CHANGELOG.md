@@ -1,4 +1,12 @@
 # Change Log
+## [v0.1.3] - 2020-05-05
+
+### Added
+
+- New advanced section in documentation.
+
+### Changed
+
 
 ## [v0.1.2] - 2020-01-14
 
