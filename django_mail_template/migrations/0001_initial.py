@@ -15,11 +15,22 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='MailTemplate',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('to', models.CharField(blank=True, help_text='A list with destiny email addresses separated with coma.', max_length=1000, null=True)),
-                ('from_email', models.EmailField(help_text="Sender's email address.", max_length=254)),
-                ('subject', models.CharField(help_text='Subject text for the mail. Context variable can be used.', max_length=140)),
-                ('body', models.TextField(blank=True, help_text='The content of the mail. Context variable can be used.', max_length=5000, null=True)),
+                ('id', models.AutoField(auto_created=True, primary_key=True,
+                                        serialize=False, verbose_name='ID')),
+                ('to', models.CharField(blank=True,
+                                        help_text='A list with destiny email '
+                                                  'addresses separated with '
+                                                  'coma.',
+                                        max_length=1000, null=True)),
+                ('from_email', models.EmailField(
+                    help_text="Sender's email address.", max_length=254)),
+                ('subject', models.CharField(
+                    help_text='Subject text for the mail. Context variable '
+                              'can be used.', max_length=140)),
+                ('body', models.TextField(
+                    blank=True, help_text='The content of the mail. Context '
+                                          'variable can be used.',
+                    max_length=5000, null=True)),
             ],
             options={
                 'verbose_name': 'Mail Template',
@@ -29,9 +40,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Configuration',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True,
+                                        serialize=False, verbose_name='ID')),
                 ('process', models.CharField(max_length=200)),
-                ('mail_template', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='django_mail_template.MailTemplate')),
+                ('mail_template', models.ForeignKey(
+                    blank=True, null=True,
+                    on_delete=django.db.models.deletion.SET_NULL,
+                    to='django_mail_template.MailTemplate')),
             ],
             options={
                 'verbose_name': 'Configuration',
