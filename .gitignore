@@ -19,3 +19,4 @@ tox_shell.ini
 dist/
 
 html_cov
+tmp
