@@ -1,4 +1,21 @@
 # Change Log
+## [v0.1.4] - 2020-07-12
+
+### Added
+
+- Add Description field to Configuration model.
+
+- Add Description field to MailTemplate model.
+
+- Add Title field to MailTemplate model.
+
+- More elements for translation.
+
+### Changed
+
+- Modify string representation of MailTemplate model. Each MailTemplate now is
+ represented by it's title.  
+
 ## [v0.1.3] - 2020-05-05
 
 ### Added
