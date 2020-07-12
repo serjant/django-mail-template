@@ -14,7 +14,8 @@ from django_mail_template.models import (MailTemplate, Configuration)
 class TestMailTemplate(UnitTestCase):
 
     def setUp(self) -> None:
-        self.mail = MailTemplate(from_email='a@b.com',
+        self.mail = MailTemplate(title=_('test title'),
+                                 from_email='a@b.com',
                                  subject=_('test subject'))
 
     def test_mail_data_model(self):
@@ -24,7 +25,7 @@ class TestMailTemplate(UnitTestCase):
         self.mail.full_clean()  # Should not fail
 
     def test_mail_string(self):
-        expected_text = _('test subject')
+        expected_text = _('test title')
         self.assertEqual(expected_text, str(self.mail))
 
     def test_mail_template_verbose_name(self):
@@ -34,6 +35,29 @@ class TestMailTemplate(UnitTestCase):
     def test_mail_template_plural_name(self):
         verbose_name = MailTemplate._meta.verbose_name_plural
         assert verbose_name == _('Mails Templates')
+
+    def test_title_field_type(self):
+        field = MailTemplate._meta.get_field('title')
+        assert isinstance(field, models.CharField)
+
+    def test_title_field_max_length(self):
+        big_subject = 'chars' * 20 + 'exceed'  # 5 * 20 = 100 character max
+        subject_ok = 'chars' * 20
+        self.mail.title = big_subject
+        with self.assertRaises(ValidationError):
+            self.mail.full_clean()
+        self.mail.title = subject_ok
+        self.mail.full_clean()
+
+    def test_title_verbose_name(self):
+        field = MailTemplate._meta.get_field('title')
+        self.assertEqual(field.verbose_name, _("Title"))
+
+    def test_title_field_help_text(self):
+        expected_help_text = \
+            _('A title to identify the mail template.')
+        actual_help_text = MailTemplate._meta.get_field('title').help_text
+        self.assertEqual(expected_help_text, actual_help_text)
 
     def test_to_field_max_length(self):
         lots = 'addresmail_test@mail.com,' * 41  # 25 character * 41 == 1025
@@ -232,12 +256,29 @@ class TestConfiguration(UnitTestCase):
     def test_configuration_string_with_mail_template(self):
         # Fixture
         mail = MailTemplate.objects.create(
+            title='Title for mail template',
             subject='test mail template subject',
             from_email='a@b.com'
         )
         self.configuration.mail_template = mail
-        expected_text = _('PROCESS_ID - test mail template subject')
+        expected_text = _('PROCESS_ID - Title for mail template')
         assert str(self.configuration) == expected_text
+
+    def test_description_field_type(self):
+        field = Configuration._meta.get_field('description')
+        assert isinstance(field, models.TextField)
+
+    def test_description_verbose_name(self):
+        field = Configuration._meta.get_field('description')
+        self.assertEqual(field.verbose_name, _("Description"))
+
+    def test_description_help_test(self):
+        field = Configuration._meta.get_field('description')
+        self.assertEqual(
+            field.help_text,
+            _("Description for configuration. This description can contain "
+              "the contextual variables that are expected to be used in "
+              "associated MailTemplates."))
 
 
 class TestConfigurationBehavior(UnitTestCase):
@@ -251,10 +292,12 @@ class TestConfigurationBehavior(UnitTestCase):
     def test_get_mail_template_return_correct_mail_template(self):
         # Fixture
         mail_yes = MailTemplate.objects.create(
+            title='Title for correct mail template',
             subject='test mail template subject',
             from_email='a@b.com'
         )
         mail_no = MailTemplate.objects.create(
+            title='Title for incorrect mail template',
             subject='Bad mail template subject',
             from_email='a@b.com'
         )

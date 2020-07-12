@@ -9,11 +9,20 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.translation import gettext
 from django_mail_template.tools import replace_context_variable
 
+#: TODO: Perhaps MailTempalte can have a title and a method to search by title
+#: TODO: so someone can search for MailTemplate.get_mail_template_with_title
+#: TODO: Also could be necessary to add description to COnfiguration. So in
+#: TODO: description can be added the contextual variables
+
 
 class MailTemplate(models.Model):
     """
     Mail():
     """
+    #: Title for mail template
+    title = models.CharField(
+        verbose_name=_('Title'), max_length=100,
+        help_text=_('A title to identify the mail template.'))
     #: Field with destiny email address.
     to = models.CharField(
         max_length=1000, blank=True, null=True,
@@ -35,7 +44,7 @@ class MailTemplate(models.Model):
         verbose_name_plural = _('Mails Templates')
 
     def __str__(self):
-        return '{}'.format(self.subject)
+        return self.title
 
     def clean(self):
         if self.to:
@@ -97,6 +106,12 @@ class Configuration(models.Model):
 
     mail_template = models.ForeignKey(MailTemplate, on_delete=models.SET_NULL,
                                       null=True, blank=True)
+
+    description = models.TextField(
+        verbose_name=_("Description"), blank=True, null=True,
+        help_text=_("Description for configuration. This description can "
+                    "contain the contextual variables that are expected to "
+                    "be used in associated MailTemplates."))
 
     class Meta:
         verbose_name = _('Configuration')
