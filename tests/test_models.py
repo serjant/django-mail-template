@@ -117,6 +117,20 @@ class TestMailTemplate(UnitTestCase):
         field = MailTemplate._meta.get_field('body')
         assert isinstance(field, models.TextField)
 
+    def test_description_field_type(self):
+        field = MailTemplate._meta.get_field('description')
+        assert isinstance(field, models.TextField)
+
+    def test_description_verbose_name(self):
+        field = MailTemplate._meta.get_field('description')
+        self.assertEqual(field.verbose_name, _("Description"))
+
+    def test_description_help_test(self):
+        field = MailTemplate._meta.get_field('description')
+        self.assertEqual(
+            field.help_text,
+            _("Description of the mail template."))
+
 
 class TestSendMailTemplate(UnitTestCase):
 

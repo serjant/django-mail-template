@@ -39,6 +39,10 @@ class MailTemplate(models.Model):
         blank=True, null=True, max_length=5000,
         help_text=_('The content of the mail. Context variable can be used.'))
 
+    description = models.TextField(
+        verbose_name=_('Description'), blank=True, null=True,
+        help_text=_('Description of the mail template.'))
+
     class Meta:
         verbose_name = _('Mail Template')
         verbose_name_plural = _('Mails Templates')
