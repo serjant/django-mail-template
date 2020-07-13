@@ -4,7 +4,7 @@ from smtplib import SMTPException
 from django.db import models
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import gettext
 from django_mail_template.tools import replace_context_variable
@@ -116,12 +116,22 @@ class MailTemplate(models.Model):
             body = replace_context_variable(text=self.body,
                                             context_variable=context)
         try:
-            result = send_mail(
+            msg = EmailMultiAlternatives(
                 subject=subject,
-                message=body,
                 from_email=self.from_email,
-                recipient_list=self.to
+                to=self.to,
+                # cc=self.cc.split(','),
+                # bcc=self.bcc.split(','),
+                # reply_to=self.reply_to.split(',')
             )
+            msg.attach_alternative(body, 'text/html')
+            # result = send_mail(
+            #     subject=subject,
+            #     message=body,
+            #     from_email=self.from_email,
+            #     recipient_list=self.to
+            # )
+            result = msg.send()
             if result == 0:
                 return False, _('Mail not sent.')
             elif result == 1:

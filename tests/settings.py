@@ -43,3 +43,5 @@ BASE_DIR = os.path.dirname(
 LOCALE_PATHS = [
     os.path.join(BASE_DIR, "django_mail_template/locale"),
 ]
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

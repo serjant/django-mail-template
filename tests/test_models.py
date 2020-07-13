@@ -268,21 +268,21 @@ class TestSendMailTemplate(UnitTestCase):
         assert (False, _('The argument for send method must be a mapping.'))\
                == self.mail.send('fake-context')
 
-    @patch('django_mail_template.models.send_mail')
+    @patch('django_mail_template.models.EmailMultiAlternatives.send')
     def test_can_send_mail_without_context(
             self, mock_django_mail
     ):
         self.mail.send()
         assert 1 == mock_django_mail.call_count
 
-    @patch('django_mail_template.models.send_mail')
+    @patch('django_mail_template.models.EmailMultiAlternatives.send')
     def test_can_not_send_mail_without_required_attributes_valid_context(
             self, mock_django_mail
     ):
         self.mail.send('fake-context')
         assert 0 == mock_django_mail.call_count
 
-    @patch('django_mail_template.models.send_mail')
+    @patch('django_mail_template.models.EmailMultiAlternatives.send')
     def test_can_can_catch_send_mail_exceptions(
             self, mock_django_mail
     ):
@@ -293,7 +293,7 @@ class TestSendMailTemplate(UnitTestCase):
         assert not result
         assert message == str(e)
 
-    @patch('django_mail_template.models.send_mail')
+    @patch('django_mail_template.models.EmailMultiAlternatives.send')
     def test_send_mail_return_no_mail_sent(
             self, mock_django_mail
     ):
@@ -302,7 +302,7 @@ class TestSendMailTemplate(UnitTestCase):
         assert not result
         assert message == _('Mail not sent.')
 
-    @patch('django_mail_template.models.send_mail')
+    @patch('django_mail_template.models.EmailMultiAlternatives.send')
     def test_send_mail_return_mail_sent(
             self, mock_django_mail
     ):
