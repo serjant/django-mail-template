@@ -1,7 +1,8 @@
 # -*- coding: UTF-8 -*-
 from unittest import TestCase as UnitTest
 
-from django_mail_template.tools import replace_context_variable
+from django_mail_template.tools import (replace_context_variable,
+                                        clean_address_list)
 
 
 class TestReplaceContextVariable(UnitTest):
@@ -50,3 +51,30 @@ class TestReplaceContextVariable(UnitTest):
         expected = 'Dummy text example {fake%2d0} {more-fake}.'
         data = {'context_variable': 'example', 'replaced_text': 'of replace'}
         assert expected == replace_context_variable(text, data)
+
+
+class TestConvertToComaSeparatedList(UnitTest):
+
+    def test_receive_string_with_one_email_return_a_list(self):
+        result = clean_address_list('a@b.com')
+        assert result == ['a@b.com']
+
+    def test_receive_list_with_one_email_return_same_list(self):
+        result = clean_address_list(['a@b.com', ])
+        assert result == ['a@b.com']
+
+    def test_receive_string_with_more_than_one_address_return_a_list(self):
+        result = clean_address_list('a@b.com, b@b.com, c@b.com')
+        assert result == ['a@b.com', 'b@b.com', 'c@b.com']
+
+    def test_receive_empty_list_return_empty_list(self):
+        result = clean_address_list([])
+        assert result == []
+
+    def test_receive_empty_string_return_empty_list(self):
+        result = clean_address_list('')
+        assert result == []
+
+    def test_receive_none_return_empty_list(self):
+        result = clean_address_list(None)
+        assert result == []

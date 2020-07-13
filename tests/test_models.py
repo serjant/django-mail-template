@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 from smtplib import SMTPException
-from unittest.mock import patch, call, Mock
+from unittest.mock import patch, call
 
 import pytest
 from unittest import TestCase as UnitTestCase
@@ -81,8 +81,13 @@ class TestMailTemplate(UnitTestCase):
 
     def test_to_field_do_validation(self):
         self.mail.to = 'no-mail, simple@mail.com'
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(ValidationError) as e:
             self.mail.full_clean()
+        exception = e.exception
+        self.assertEqual(
+            exception.messages[0],
+            _('Enter a valid comma separated list of email addresses for '
+              'field To.'))
 
     def test_cc_field_verbose(self):
         expected = _('Copy to')
@@ -107,8 +112,13 @@ class TestMailTemplate(UnitTestCase):
 
     def test_cc_field_do_validation(self):
         self.mail.cc = 'no-mail, simple@mail.com'
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(ValidationError) as e:
             self.mail.full_clean()
+        exception = e.exception
+        self.assertEqual(
+            exception.messages[0],
+            _('Enter a valid comma separated list of email addresses for '
+              'field Copy.'))
 
     def test_bcc_field_verbose_name(self):
         expected = _('Blind copy')
@@ -133,8 +143,13 @@ class TestMailTemplate(UnitTestCase):
 
     def test_bcc_field_do_validation(self):
         self.mail.bcc = 'no-mail, simple@mail.com'
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(ValidationError) as e:
             self.mail.full_clean()
+        exception = e.exception
+        self.assertEqual(
+            exception.messages[0],
+            _('Enter a valid comma separated list of email addresses for '
+              'field Blind copy.'))
 
     def test_from_email_field_max_length(self):
         lots = 'a' * 250 + 'addressmailtest@mail.com'
@@ -177,8 +192,13 @@ class TestMailTemplate(UnitTestCase):
 
     def test_reply_to_do_validation(self):
         self.mail.reply_to = 'no-mail, simple@mail.com'
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(ValidationError) as e:
             self.mail.full_clean()
+        exception = e.exception
+        self.assertEqual(
+            exception.messages[0],
+            _('Enter a valid comma separated list of email addresses for '
+              'field Reply to.'))
 
     def test_subject_field_max_length(self):
         big_subject = 'c' * 140 + 'exceed'  # 1 * 140 = 140 character max
@@ -282,34 +302,14 @@ class TestSendMailTemplate(UnitTestCase):
         self.mail.send('fake-context')
         assert 0 == mock_django_mail.call_count
 
-    @patch('django_mail_template.models.EmailMultiAlternatives.send')
-    def test_can_can_catch_send_mail_exceptions(
-            self, mock_django_mail
+    @patch('django_mail_template.models.clean_address_list')
+    def test_send_mail_convert_to_field(
+            self, mock_clean_address_list
     ):
-        e = SMTPException('fake-fail')
-        mock_django_mail.side_effect = e
-
-        result, message = self.mail.send()
-        assert not result
-        assert message == str(e)
-
-    @patch('django_mail_template.models.EmailMultiAlternatives.send')
-    def test_send_mail_return_no_mail_sent(
-            self, mock_django_mail
-    ):
-        mock_django_mail.return_value = 0
-        result, message = self.mail.send()
-        assert not result
-        assert message == _('Mail not sent.')
-
-    @patch('django_mail_template.models.EmailMultiAlternatives.send')
-    def test_send_mail_return_mail_sent(
-            self, mock_django_mail
-    ):
-        mock_django_mail.return_value = 1
-        result, message = self.mail.send()
-        assert result
-        assert message == _('Mail sent.')
+        expected = [call(self.mail.to), call(self.mail.cc),
+                    call(self.mail.bcc), call(self.mail.reply_to)]
+        self.mail.send()
+        self.assertEqual(mock_clean_address_list.call_args_list, expected)
 
 
 class TestConfiguration(UnitTestCase):

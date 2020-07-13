@@ -4,10 +4,11 @@ from smtplib import SMTPException
 from django.db import models
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import send_mail, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import gettext
-from django_mail_template.tools import replace_context_variable
+from django_mail_template.tools import (replace_context_variable,
+                                        clean_address_list)
 
 #: TODO: Perhaps MailTempalte can have a title and a method to search by title
 #: TODO: so someone can search for MailTemplate.get_mail_template_with_title
@@ -78,13 +79,13 @@ class MailTemplate(models.Model):
 
     def clean(self):
         if self.to:
-            self._clean_address_list(self.to, _('To'))
+            clean_address_list(self.to, _('To'))
         if self.cc:
-            self._clean_address_list(self.cc, _('Copy'))
+            clean_address_list(self.cc, _('Copy'))
         if self.bcc:
-            self._clean_address_list(self.bcc, _('Blind copy'))
+            clean_address_list(self.bcc, _('Blind copy'))
         if self.reply_to:
-            self._clean_address_list(self.reply_to, _('Reply to'))
+            clean_address_list(self.reply_to, _('Reply to'))
 
     def send(self, context=None):
         """
@@ -115,29 +116,17 @@ class MailTemplate(models.Model):
                                                context_variable=context)
             body = replace_context_variable(text=self.body,
                                             context_variable=context)
-        try:
-            msg = EmailMultiAlternatives(
-                subject=subject,
-                from_email=self.from_email,
-                to=self.to,
-                # cc=self.cc.split(','),
-                # bcc=self.bcc.split(','),
-                # reply_to=self.reply_to.split(',')
-            )
-            msg.attach_alternative(body, 'text/html')
-            # result = send_mail(
-            #     subject=subject,
-            #     message=body,
-            #     from_email=self.from_email,
-            #     recipient_list=self.to
-            # )
-            result = msg.send()
-            if result == 0:
-                return False, _('Mail not sent.')
-            elif result == 1:
-                return True, _('Mail sent.')
-        except SMTPException as e:
-            return False, str(e)
+        msg = EmailMultiAlternatives(
+            subject=subject,
+            from_email=self.from_email,
+            to=clean_address_list(self.to),
+            cc=clean_address_list(self.cc),
+            bcc=clean_address_list(self.bcc),
+            reply_to=clean_address_list(self.reply_to)
+        )
+        msg.body = body
+        msg.attach_alternative(body, 'text/html')
+        return msg.send()
 
 
 class Configuration(models.Model):
