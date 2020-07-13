@@ -1,4 +1,21 @@
 # Change Log
+## [v0.1.5] - 2020-07-13
+
+### Added
+
+- Add cc, bcc, reply_to fields to MailTemplate model.
+
+- Add more translations.
+
+### Changed
+
+- Now MailTemplate use EmailMultiAlternatives class for creating and sending
+ mails.
+
+- MailTemplate body field is added to EmailMultiAlternatives instance as
+ body, and also attached as alternative as "text/html"
+
+
 ## [v0.1.4] - 2020-07-12
 
 ### Added
