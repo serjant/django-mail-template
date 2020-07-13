@@ -67,16 +67,6 @@ class MailTemplate(models.Model):
     def __str__(self):
         return self.title
 
-    @staticmethod
-    def _clean_address_list(address_list, field_name):
-        field_ = forms.EmailField()
-        try:
-            [field_.clean(addr) for addr in address_list.split(',')]
-        except forms.ValidationError:
-            raise forms.ValidationError(_(f'Enter a valid comma separated '
-                                          f'list of email addresses for '
-                                          f'field {field_name}.'))
-
     def clean(self):
         if self.to:
             clean_address_list(self.to, _('To'))

@@ -21,12 +21,6 @@ def clean_address_list(addresses, field_name=None):
     try:
         return [field_.clean(addr) for addr in addresses]
     except ValidationError:
-        raise ValidationError(_(f'Enter a valid comma separated '
-                                f'list of email addresses for '
-                                f'field {field_name}.'))
-
-    # if isinstance(addresses, list):
-    #     return addresses
-    # if addresses is None or len(addresses) == 0:
-    #     return []
-    # return [address.strip() for address in addresses.split(',')]
+        raise ValidationError(_('Enter a valid comma separated '
+                                'list of email addresses for '
+                                'field {}.'.format(field_name)))
