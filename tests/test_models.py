@@ -60,17 +60,22 @@ class TestMailTemplate(UnitTestCase):
         self.assertEqual(expected_help_text, actual_help_text)
 
     def test_to_field_max_length(self):
-        lots = 'addresmail_test@mail.com,' * 41  # 25 character * 41 == 1025
+        lots = 'addressmailtest@mail.com,' * 41  # 25 character * 41 == 1025
         self.mail.to = lots[:-1]
         with self.assertRaises(ValidationError):
             self.mail.full_clean()
-        ok = 'addresmail_test@mail.com,' * 40  # 25 character * 40 = 1000
+        ok = 'addressmailtest@mail.com,' * 40  # 25 character * 40 = 1000
         self.mail.to = ok[:-1]
         self.mail.full_clean()
 
+    def test_to_field_verbose_name(self):
+        expected = _('To')
+        actual = MailTemplate._meta.get_field('to').verbose_name
+        self.assertEqual(expected, actual)
+
     def test_to_field_help_text(self):
         expected_help_text = \
-            _('A list with destiny email addresses separated with coma.')
+            _('A list with email addresses separated with coma.')
         actual_help_text = MailTemplate._meta.get_field('to').help_text
         self.assertEqual(expected_help_text, actual_help_text)
 
@@ -79,18 +84,101 @@ class TestMailTemplate(UnitTestCase):
         with self.assertRaises(ValidationError):
             self.mail.full_clean()
 
+    def test_cc_field_verbose(self):
+        expected = _('Copy to')
+        actual = MailTemplate._meta.get_field('cc').verbose_name
+        self.assertEqual(expected, actual)
+
+    def test_cc_field_help_text(self):
+        expected_help_text = \
+            _('A list with email addresses separated with coma '
+              'to be used in the "Cc" header.')
+        actual_help_text = MailTemplate._meta.get_field('cc').help_text
+        self.assertEqual(expected_help_text, actual_help_text)
+
+    def test_cc_field_max_length(self):
+        lots = 'addressmailtest@mail.com,' * 41  # 25 character * 41 == 1025
+        self.mail.cc = lots[:-1]
+        with self.assertRaises(ValidationError):
+            self.mail.full_clean()
+        ok = 'addressmailtest@mail.com,' * 40  # 25 character * 40 = 1000
+        self.mail.cc = ok[:-1]
+        self.mail.full_clean()
+
+    def test_cc_field_do_validation(self):
+        self.mail.cc = 'no-mail, simple@mail.com'
+        with self.assertRaises(ValidationError):
+            self.mail.full_clean()
+
+    def test_bcc_field_verbose_name(self):
+        expected = _('Blind copy')
+        actual = MailTemplate._meta.get_field('bcc').verbose_name
+        self.assertEqual(expected, actual)
+
+    def test_bcc_field_help_text(self):
+        expected_help_text = \
+            _('A list with email addresses separated with coma to be '
+              'used in the "Bcc" header.')
+        actual_help_text = MailTemplate._meta.get_field('bcc').help_text
+        self.assertEqual(expected_help_text, actual_help_text)
+
+    def test_bcc_field_max_length(self):
+        lots = 'addresmail_test@mail.com,' * 41  # 25 character * 41 == 1025
+        self.mail.bcc = lots[:-1]
+        with self.assertRaises(ValidationError):
+            self.mail.full_clean()
+        ok = 'addresmail_test@mail.com,' * 40  # 25 character * 40 = 1000
+        self.mail.bcc = ok[:-1]
+        self.mail.full_clean()
+
+    def test_bcc_field_do_validation(self):
+        self.mail.bcc = 'no-mail, simple@mail.com'
+        with self.assertRaises(ValidationError):
+            self.mail.full_clean()
+
     def test_from_email_field_max_length(self):
-        lots = 'a' * 250 + 'addresmail_test@mail.com'
+        lots = 'a' * 250 + 'addressmailtest@mail.com'
         self.mail.from_email = lots[:-1],
         with self.assertRaises(ValidationError):
             self.mail.full_clean()
-        self.mail.from_email = 'a' * 225 + 'addresmail_test@mail.com'
+        self.mail.from_email = 'a' * 225 + 'addressmailtest@mail.com'
         self.mail.full_clean()
+
+    def test_from_email_field_verbose_name(self):
+        expected = _('From')
+        actual = MailTemplate._meta.get_field('from_email').verbose_name
+        self.assertEqual(expected, actual)
 
     def test_from_email_field_help_text(self):
         expected_help_text = _("Sender's email address.")
         actual_help_text = MailTemplate._meta.get_field('from_email').help_text
         self.assertEqual(expected_help_text, actual_help_text)
+
+    def test_reply_to_field_verbose_name(self):
+        expected = _('Reply to')
+        actual = MailTemplate._meta.get_field('reply_to').verbose_name
+        self.assertEqual(expected, actual)
+
+    def test_reply_to_field_help_text(self):
+        expected_help_text = \
+            _('A list with email addresses separated with coma to be '
+              'used in the "Reply-To" header.')
+        actual_help_text = MailTemplate._meta.get_field('reply_to').help_text
+        self.assertEqual(expected_help_text, actual_help_text)
+
+    def test_reply_to_field_max_length(self):
+        lots = 'addresmail_test@mail.com,' * 41  # 25 character * 41 == 1025
+        self.mail.reply_to = lots[:-1]
+        with self.assertRaises(ValidationError):
+            self.mail.full_clean()
+        ok = 'addresmail_test@mail.com,' * 40  # 25 character * 40 = 1000
+        self.mail.reply_to = ok[:-1]
+        self.mail.full_clean()
+
+    def test_reply_to_do_validation(self):
+        self.mail.reply_to = 'no-mail, simple@mail.com'
+        with self.assertRaises(ValidationError):
+            self.mail.full_clean()
 
     def test_subject_field_max_length(self):
         big_subject = 'c' * 140 + 'exceed'  # 1 * 140 = 140 character max
@@ -101,11 +189,21 @@ class TestMailTemplate(UnitTestCase):
         self.mail.subject = subject_ok
         self.mail.full_clean()
 
+    def test_subject_field_verbose_name(self):
+        expected = _('Subject')
+        actual = MailTemplate._meta.get_field('subject').verbose_name
+        self.assertEqual(expected, actual)
+
     def test_subject_field_help_text(self):
         expected_help = _('Subject text for the mail. Context variable can be '
                           'used.')
         actual_help_text = MailTemplate._meta.get_field('subject').help_text
         self.assertEqual(expected_help, actual_help_text)
+
+    def test_body_field_verbose_name(self):
+        expected = _('Body')
+        actual = MailTemplate._meta.get_field('body').verbose_name
+        self.assertEqual(expected, actual)
 
     def test_body_field_help_text(self):
         expected_help_text = _('The content of the mail. Context variable can '

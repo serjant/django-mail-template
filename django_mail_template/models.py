@@ -25,20 +25,36 @@ class MailTemplate(models.Model):
         help_text=_('A title to identify the mail template.'))
     #: Field with destiny email address.
     to = models.CharField(
-        max_length=1000, blank=True, null=True,
-        help_text=_('A list with destiny email addresses separated with coma.')
+        verbose_name=_('To'), max_length=1000, blank=True, null=True,
+        help_text=_('A list with email addresses separated with coma.')
     )
+    #: Field with email's destinies to be copied.
+    cc = models.CharField(
+        verbose_name=_('Copy to'), max_length=1000, blank=True, null=True,
+        help_text=_('A list with email addresses separated with coma '
+                    'to be used in the "Cc" header.'))
+    #: Field with email's destinies to be blind copied.
+    bcc = models.CharField(
+        verbose_name=_('Blind copy'), max_length=1000, blank=True, null=True,
+        help_text=_('A list with email addresses separated with coma to be '
+                    'used in the "Bcc" header.'))
     #: Field with sender (from) email address.
-    from_email = models.EmailField(help_text=_("Sender's email address."))
+    from_email = models.EmailField(
+        verbose_name=_('From'), help_text=_("Sender's email address."))
     #: Subject for the mail. Context variable can be used
     subject = models.CharField(
-        max_length=140,
+        verbose_name=_('Subject'), max_length=140,
         help_text=_('Subject text for the mail. Context variable can be used.')
     )
     body = models.TextField(
-        blank=True, null=True, max_length=5000,
+        verbose_name=_('Body'), blank=True, null=True, max_length=5000,
         help_text=_('The content of the mail. Context variable can be used.'))
 
+    #: Field with email's reply to.
+    reply_to = models.CharField(
+        verbose_name=_('Reply to'), max_length=1000, blank=True, null=True,
+        help_text=_('A list with email addresses separated with coma to be '
+                    'used in the "Reply-To" header.'))
     description = models.TextField(
         verbose_name=_('Description'), blank=True, null=True,
         help_text=_('Description of the mail template.'))
@@ -50,15 +66,25 @@ class MailTemplate(models.Model):
     def __str__(self):
         return self.title
 
+    @staticmethod
+    def _clean_address_list(address_list, field_name):
+        field_ = forms.EmailField()
+        try:
+            [field_.clean(addr) for addr in address_list.split(',')]
+        except forms.ValidationError:
+            raise forms.ValidationError(_(f'Enter a valid comma separated '
+                                          f'list of email addresses for '
+                                          f'field {field_name}.'))
+
     def clean(self):
         if self.to:
-            to_field = forms.EmailField()
-            try:
-                return [to_field.clean(addr)
-                        for addr in self.to.split(',')]
-            except forms.ValidationError:
-                raise forms.ValidationError(_('Enter a valid comma separated '
-                                              'list of email addresses.'))
+            self._clean_address_list(self.to, _('To'))
+        if self.cc:
+            self._clean_address_list(self.cc, _('Copy'))
+        if self.bcc:
+            self._clean_address_list(self.bcc, _('Blind copy'))
+        if self.reply_to:
+            self._clean_address_list(self.reply_to, _('Reply to'))
 
     def send(self, context=None):
         """
