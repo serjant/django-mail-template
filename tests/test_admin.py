@@ -119,7 +119,7 @@ class TestMailTemplateActionUnitTest(UnitTestCase):
     def test_reports_all_messages_successfully_sent(
             self, mock_message_user, mock_messages
     ):
-        msg = 'Amount of successfully sent mails: 2.'
+        msg = 'Amount of sent mails: 2.'
         self.mail_template_1.to = 'a@b.com'
         self.mail_template_2.to = 'a@b.com'
         self.admin_mail_template.test_mail_template(
@@ -133,7 +133,7 @@ class TestMailTemplateActionUnitTest(UnitTestCase):
             self, mock_message_user, mock_messages
     ):
         msg = 'MailTemplate Test mail: Gives an error when trying to send ' \
-              'it. Most likely: please check subject and body use context ' \
+              'it. Most likely: please check subject and body uses context ' \
               'variables as expected: "{variable{" and "}variable}" are ' \
               'both wrong use. The error detail: unexpected \'{\' in field ' \
               'name (<class \'ValueError\'>).'
@@ -155,7 +155,7 @@ class TestMailTemplateActionUnitTest(UnitTestCase):
             self, mock_message_user, mock_messages
     ):
         msg = 'MailTemplate Test mail: Gives an error when trying to send ' \
-              'it. Most likely: please check subject and body use context ' \
+              'it. Most likely: please check subject and body uses context ' \
               'variables as expected: "{variable{" and "}variable}" are ' \
               'both wrong use. The error detail: Single \'}\' encountered ' \
               'in format string (<class \'ValueError\'>).'
