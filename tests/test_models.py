@@ -282,12 +282,6 @@ class TestSendMailTemplate(UnitTestCase):
         self.mail.send(self.context_data)
         assert 2 == mock_replace_context_variable.call_count
 
-    def test_send_return_false_and_by_could_not_proceed_if_parameter_is_wrong(
-            self
-    ):
-        assert (False, _('The argument for send method must be a mapping.'))\
-               == self.mail.send('fake-context')
-
     @patch('django_mail_template.models.EmailMultiAlternatives.send')
     def test_can_send_mail_without_context(
             self, mock_django_mail
@@ -299,7 +293,12 @@ class TestSendMailTemplate(UnitTestCase):
     def test_can_not_send_mail_without_required_attributes_valid_context(
             self, mock_django_mail
     ):
-        self.mail.send('fake-context')
+        with self.assertRaises(ValueError) as e:
+            self.mail.send('fake-context')
+        exception = e.exception
+        self.assertEqual(
+            str(exception),
+            'The argument for send method must be a mapping.')
         assert 0 == mock_django_mail.call_count
 
     @patch('django_mail_template.models.clean_address_list')

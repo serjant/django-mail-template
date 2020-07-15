@@ -98,9 +98,11 @@ class MailTemplate(models.Model):
         subject = self.subject
         body = self.body
         if context is None:
+            # Needed whe no context is received so no replacement is tried.
             pass
         elif not isinstance(context, dict):
-            return False, _('The argument for send method must be a mapping.')
+            raise ValueError(_('The argument for send method must be a '
+                               'mapping.'))
         else:
             subject = replace_context_variable(text=self.subject,
                                                context_variable=context)

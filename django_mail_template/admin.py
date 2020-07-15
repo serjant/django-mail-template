@@ -14,7 +14,7 @@ class MailTemplateAdmin(admin.ModelAdmin):
         for mail_template in queryset:
             if mail_template.to is None or mail_template.to == '':
                 err_msg = _('MailTemplate {}: Do not have a email '
-                            'address in To Field'.format(mail_template.title))
+                            'address in To Field').format(mail_template.title)
                 self.message_user(request, err_msg, messages.ERROR)
             else:
                 try:
@@ -22,11 +22,11 @@ class MailTemplateAdmin(admin.ModelAdmin):
                     send_mail += 1
                 except Exception as e:
                     err_msg = _('MailTemplate {}: Gives an error when '
-                                'trying to send it: {}.'.format(
-                                 mail_template.title, str(e)))
+                                'trying to send it: {}.').format(
+                                 mail_template.title, str(e))
                     self.message_user(request, err_msg, messages.ERROR)
         if send_mail > 0:
-            msg = _('Amount of successfully sent mails: {}.'.format(send_mail))
+            msg = _('Amount of successfully sent mails: {}.').format(send_mail)
             self.message_user(request, msg, messages.SUCCESS)
 
     test_mail_template.short_description = _('Test mails templates')
