@@ -56,6 +56,16 @@ class TestMailTemplateActionUnitTest(UnitTestCase):
     def test_check_to_field_exist_for_each_selected_mail_template(
             self, mock_message_user
     ):
+        self.mail_template_1.to = None
+        self.mail_template_2.to = None
+        self.admin_mail_template.test_mail_template(
+            self.request, self.mock_queryset)
+        assert mock_message_user.call_count == 2
+
+    @patch('django_mail_template.admin.admin.ModelAdmin.message_user')
+    def test_check_to_field_is_not_none_for_each_selected_mail_template(
+            self, mock_message_user
+    ):
         self.admin_mail_template.test_mail_template(
             self.request, self.mock_queryset)
         assert mock_message_user.call_count == 2

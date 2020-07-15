@@ -12,7 +12,7 @@ class MailTemplateAdmin(admin.ModelAdmin):
     def test_mail_template(self, request, queryset):
         send_mail = 0
         for mail_template in queryset:
-            if mail_template.to == '':
+            if mail_template.to is None or mail_template.to == '':
                 err_msg = _('MailTemplate {}: Do not have a email '
                             'address in To Field'.format(mail_template.title))
                 self.message_user(request, err_msg, messages.ERROR)
