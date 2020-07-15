@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+
 SECRET_KEY = 'django-mail-template'
 
 INSTALLED_APPS = [
@@ -36,6 +37,8 @@ TEMPLATES = [
         },
     },
 ]
+
+ROOT_URLCONF = 'tests.urls'
 
 import os
 BASE_DIR = os.path.dirname(

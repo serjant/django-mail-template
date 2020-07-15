@@ -69,6 +69,11 @@ class FunctionalDjangoMailTemplateTest(TestCase):
     #     assert email_2.body == 'Hello Bob Wellies!'
     #     assert email_2.from_email == 'test@domain.com'
 
+    # def test_body_with_variable_that_not_exist(self):
+    #     self.fail('not implemented')
+    #
+    # def test_body_is_not_using_contextual_variables(self):
+    #     self.fail('not implemented')
 
 # class FunctionalDjangoConfigurationTest(TestCase):
 #     pass
