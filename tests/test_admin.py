@@ -28,6 +28,12 @@ class TestMailTemplateActionUnitTest(UnitTestCase):
 
     def setUp(self) -> None:
         self.admin_mail_template = admin.site._registry[MailTemplate]
+        self.mail_template_1 = Mock()
+        self.mail_template_1.to = ''
+        self.mail_template_2 = Mock()
+        self.mail_template_2.to = ''
+        self.mock_queryset = [self.mail_template_1, self.mail_template_2]
+        self.request = Mock()
 
     def test_action_test_mail_template_exists_in_actions_select(self):
         self.assertIn('test_mail_template',
@@ -38,9 +44,75 @@ class TestMailTemplateActionUnitTest(UnitTestCase):
 
     def test_method_receive_two_parameter(self):
         # Should not fail
-        self.admin_mail_template.test_mail_template(Mock(), Mock())
+        self.admin_mail_template.test_mail_template(
+            self.request, self.mock_queryset)
 
     def test_method_short_description(self):
         self.assertEqual(
             self.admin_mail_template.test_mail_template.short_description,
             _('Test mails templates'))
+
+    @patch('django_mail_template.admin.admin.ModelAdmin.message_user')
+    def test_check_to_field_exist_for_each_selected_mail_template(
+            self, mock_message_user
+    ):
+        self.admin_mail_template.test_mail_template(
+            self.request, self.mock_queryset)
+        assert mock_message_user.call_count == 2
+
+    @patch('django_mail_template.admin.messages')
+    @patch('django_mail_template.admin.admin.ModelAdmin.message_user')
+    def test_messagess_are_added_with_correct_parameters(
+            self, mock_message_user, mock_messages
+    ):
+        err_msg = 'MailTemplate Test title: Do not have a email address ' \
+                  'in To Field'
+        self.mail_template_1.title = 'Test title'
+        self.admin_mail_template.test_mail_template(
+            self.request, [self.mail_template_1])
+        mock_message_user.assert_called_once_with(
+            self.request, err_msg, mock_messages.ERROR)
+
+    def test_call_send_method_on_each_mail_template(self):
+        self.mail_template_1.to = 'a@b.com'
+        self.mail_template_2.to = 'a@b.com'
+        self.admin_mail_template.test_mail_template(
+            self.request, self.mock_queryset)
+        self.mail_template_1.send.assert_called_once_with()
+        self.mail_template_2.send.assert_called_once_with()
+
+    def test_method_catch_problems_when_sending_mail(self):
+        self.mail_template_1.to = 'a@b.com'
+        self.mail_template_1.send.side_effect = Exception
+        self.mail_template_2.to = 'a@b.com'
+        self.mail_template_2.send.side_effect = Exception
+        self.admin_mail_template.test_mail_template(
+            self.request, self.mock_queryset)
+
+    @patch('django_mail_template.admin.messages')
+    @patch('django_mail_template.admin.admin.ModelAdmin.message_user')
+    def test_messagess_are_added_with_correct_parameters(
+            self, mock_message_user, mock_messages
+    ):
+        err_msg = 'MailTemplate Test title: Gives an error when trying to ' \
+                  'send it: An error occurred.'
+        self.mail_template_1.title = 'Test title'
+        self.mail_template_1.to = 'a@b.com'
+        self.mail_template_1.send.side_effect = Exception('An error occurred')
+        self.admin_mail_template.test_mail_template(
+            self.request, [self.mail_template_1])
+        mock_message_user.assert_called_once_with(
+            self.request, err_msg, mock_messages.ERROR)
+
+    @patch('django_mail_template.admin.messages')
+    @patch('django_mail_template.admin.admin.ModelAdmin.message_user')
+    def test_reports_all_messages_successfully_sent(
+            self, mock_message_user, mock_messages
+    ):
+        msg = 'Amount of successfully sent mails: 2.'
+        self.mail_template_1.to = 'a@b.com'
+        self.mail_template_2.to = 'a@b.com'
+        self.admin_mail_template.test_mail_template(
+            self.request, self.mock_queryset)
+        mock_message_user.assert_called_once_with(
+            self.request, msg, mock_messages.SUCCESS)
