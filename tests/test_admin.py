@@ -88,8 +88,8 @@ class TestMailTemplateActionUnitTest(UnitTestCase):
         self.mail_template_2.to = 'a@b.com'
         self.admin_mail_template.test_mail_template(
             self.request, self.mock_queryset)
-        self.mail_template_1.send.assert_called_once_with()
-        self.mail_template_2.send.assert_called_once_with()
+        self.mail_template_1.send.assert_called_once_with(context={})
+        self.mail_template_2.send.assert_called_once_with(context={})
 
     def test_method_catch_problems_when_sending_mail(self):
         self.mail_template_1.to = 'a@b.com'
@@ -101,11 +101,11 @@ class TestMailTemplateActionUnitTest(UnitTestCase):
 
     @patch('django_mail_template.admin.messages')
     @patch('django_mail_template.admin.admin.ModelAdmin.message_user')
-    def test_messagess_are_added_with_correct_parameters(
+    def test_catch_exception_messagess_are_added_with_correct_parameters(
             self, mock_message_user, mock_messages
     ):
-        err_msg = 'MailTemplate Test title: Gives an error when trying to ' \
-                  'send it: An error occurred.'
+        err_msg = "MailTemplate Test title: Gives an error when trying to " \
+                  "send it: An error occurred (<class 'Exception'>)."
         self.mail_template_1.title = 'Test title'
         self.mail_template_1.to = 'a@b.com'
         self.mail_template_1.send.side_effect = Exception('An error occurred')
@@ -126,3 +126,47 @@ class TestMailTemplateActionUnitTest(UnitTestCase):
             self.request, self.mock_queryset)
         mock_message_user.assert_called_once_with(
             self.request, msg, mock_messages.SUCCESS)
+
+    @patch('django_mail_template.admin.messages')
+    @patch('django_mail_template.admin.admin.ModelAdmin.message_user')
+    def test_when_body_or_subject_are_with_errors(
+            self, mock_message_user, mock_messages
+    ):
+        msg = 'MailTemplate Test mail: Gives an error when trying to send ' \
+              'it. Most likely: please check subject and body use context ' \
+              'variables as expected: "{variable{" and "}variable}" are ' \
+              'both wrong use. The error detail: unexpected \'{\' in field ' \
+              'name (<class \'ValueError\'>).'
+        mail_template = MailTemplate.objects.create(
+            title='Test mail',
+            to='a@b.com',
+            from_email='my@to.you',
+            subject='Test a subject {with}',
+            body='Body with troubles {name{'
+        )
+        self.admin_mail_template.test_mail_template(
+            self.request, [mail_template])
+        mock_message_user.assert_called_once_with(
+            self.request, msg, mock_messages.ERROR)
+
+    @patch('django_mail_template.admin.messages')
+    @patch('django_mail_template.admin.admin.ModelAdmin.message_user')
+    def test_when_body_or_subject_are_with_other_type_of_errors(
+            self, mock_message_user, mock_messages
+    ):
+        msg = 'MailTemplate Test mail: Gives an error when trying to send ' \
+              'it. Most likely: please check subject and body use context ' \
+              'variables as expected: "{variable{" and "}variable}" are ' \
+              'both wrong use. The error detail: Single \'}\' encountered ' \
+              'in format string (<class \'ValueError\'>).'
+        mail_template = MailTemplate.objects.create(
+            title='Test mail',
+            to='a@b.com',
+            from_email='my@to.you',
+            subject='Test a subject {with}',
+            body='Body with troubles }name}'
+        )
+        self.admin_mail_template.test_mail_template(
+            self.request, [mail_template])
+        mock_message_user.assert_called_once_with(
+            self.request, msg, mock_messages.ERROR)

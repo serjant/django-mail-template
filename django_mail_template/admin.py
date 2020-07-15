@@ -18,21 +18,30 @@ class MailTemplateAdmin(admin.ModelAdmin):
                 self.message_user(request, err_msg, messages.ERROR)
             else:
                 try:
-                    mail_template.send()
+                    # send with context={} is to force replacement and detect
+                    # any error
+                    mail_template.send(context={})
                     send_mail += 1
-                except Exception as e:
+                except ValueError as e:
                     err_msg = _('MailTemplate {}: Gives an error when '
-                                'trying to send it: {}.').format(
-                                 mail_template.title, str(e))
+                                'trying to send it. Most likely: please check '
+                                'subject and body uses context variables as '
+                                'expected: "{{variable{{" and "}}variable}}" '
+                                'are both wrong use. The error detail: {} '
+                                '({}).').format(mail_template.title, str(e), type(e))
+                    self.message_user(request, err_msg, messages.ERROR)
+                except Exception as e:
+                    # Catch any exception as it is a test.
+                    err_msg = _('MailTemplate {}: Gives an error when '
+                                'trying to send it: {} ({}).').format(
+                                 mail_template.title, str(e), type(e))
                     self.message_user(request, err_msg, messages.ERROR)
         if send_mail > 0:
-            msg = _('Amount of successfully sent mails: {}.').format(send_mail)
+            msg = _('Amount of sent mails: {}.').format(send_mail)
             self.message_user(request, msg, messages.SUCCESS)
 
     test_mail_template.short_description = _('Test mails templates')
 
 
 admin.site.register(MailTemplate, MailTemplateAdmin)
-
-# admin.site.register(MailTemplate)
 admin.site.register(Configuration)

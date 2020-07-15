@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-15 15:07-0500\n"
+"POT-Creation-Date: 2020-07-15 16:33-0500\n"
 "Last-Translator: Vicente Ramos Garcia <vramosga@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -20,15 +20,26 @@ msgstr ""
 msgid "MailTemplate {}: Do not have a email address in To Field"
 msgstr "MailTemplate {}: No tiene una dirección de correo en el campo Para"
 
-#: django_mail_template/admin.py:24
-msgid "MailTemplate {}: Gives an error when trying to send it: {}."
-msgstr "MailTemplate {}: Dio un error al intentar ser enviado: {}."
+#: django_mail_template/admin.py:26
+msgid ""
+"MailTemplate {}: Gives an error when trying to send it. Most likely: please "
+"check subject and body uses context variables as expected: \"{{variable{{\" "
+"and \"}}variable}}\" are both wrong use. The error detail: {} ({})."
+msgstr ""
+"MailTemplate {}: Dio un error al intentar enviario. Lo más probable: por "
+"favor verifique que el asunto y el mensaje usen las variables de "
+"contextocomo se espera: \"{{variable{{\" y \"}}variable}}\" ambos usos son "
+"incorrectos. El detalle del error: {} ({})."
 
-#: django_mail_template/admin.py:29
-msgid "Amount of successfully sent mails: {}."
-msgstr "La cantidad de correos enviados exitosamente: {}"
+#: django_mail_template/admin.py:35
+msgid "MailTemplate {}: Gives an error when trying to send it: {} ({})."
+msgstr "MailTemplate {}: Dio un error al intentar ser enviado: {} ({})."
 
-#: django_mail_template/admin.py:32 tests/test_admin.py:53
+#: django_mail_template/admin.py:40
+msgid "Amount of sent mails: {}."
+msgstr "Cantidad de correos enviados: {}."
+
+#: django_mail_template/admin.py:43 tests/test_admin.py:53
 msgid "Test mails templates"
 msgstr "Probar plantillas de correo"
 
@@ -162,10 +173,6 @@ msgstr "Configuraciones"
 msgid "No mail template"
 msgstr "Sin plantilla de correo"
 
-#: django_mail_template/templates/django_mail_template/admin/change_form_mail_template.html:8
-msgid "Test mail template"
-msgstr "Sin plantilla de correo"
-
 #: django_mail_template/tools.py:24
 msgid "Enter a valid comma separated list of email addresses for field {}."
 msgstr ""
@@ -219,6 +226,9 @@ msgstr "Test text using {test}"
 #: tests/test_models.py:375
 msgid "PROCESS_ID - Title for mail template"
 msgstr "PROCESS_ID - Title for mail template"
+
+#~ msgid "Test mail template"
+#~ msgstr "Sin plantilla de correo"
 
 #~ msgid "Enter a valid comma separated "
 #~ msgstr ""
