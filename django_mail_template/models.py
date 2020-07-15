@@ -2,18 +2,15 @@
 from smtplib import SMTPException
 
 from django.db import models
-from django import forms
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import gettext
 from django_mail_template.tools import (replace_context_variable,
                                         clean_address_list)
+from ckeditor.fields import RichTextField
 
-#: TODO: Perhaps MailTempalte can have a title and a method to search by title
-#: TODO: so someone can search for MailTemplate.get_mail_template_with_title
-#: TODO: Also could be necessary to add description to COnfiguration. So in
-#: TODO: description can be added the contextual variables
 
 
 class MailTemplate(models.Model):
@@ -47,7 +44,7 @@ class MailTemplate(models.Model):
         verbose_name=_('Subject'), max_length=140,
         help_text=_('Subject text for the mail. Context variable can be used.')
     )
-    body = models.TextField(
+    body = RichTextField(
         verbose_name=_('Body'), blank=True, null=True, max_length=5000,
         help_text=_('The content of the mail. Context variable can be used.'))
 
