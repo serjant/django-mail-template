@@ -1,4 +1,12 @@
 # Change Log
+## [v0.1.6] - 2020-07-15
+
+### Added
+
+- Add an action in admin site for MailTemplate that let to test selected
+ MailTemplates. It requires each MailTemplate to be tested to have a valid
+ value in To field temporally, if not the send test will fail.
+
 ## [v0.1.5] - 2020-07-13
 
 ### Added
