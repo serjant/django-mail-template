@@ -1,8 +1,5 @@
 # -*- coding: UTF-8 -*-
-from smtplib import SMTPException
-
 from django.db import models
-
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import gettext_lazy as _
@@ -12,9 +9,6 @@ from django_mail_template.tools import (replace_context_variable,
 
 
 class MailTemplate(models.Model):
-    """
-    Mail():
-    """
     #: Title for mail template
     title = models.CharField(
         verbose_name=_('Title'), max_length=100,
