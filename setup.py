@@ -16,8 +16,8 @@ setup(
     license='MIT License',
     description='Application for creating mails templates with context '
                 'variables. There is a double mapping between a mail template '
-                'and process configuration so is possible to change the used '
-                'mail template in a process at run time.',
+                'and process configuration so is possible to change used '
+                'mail template of a process at run time.',
     long_description=README,
     long_description_content_type='text/markdown',
     url='',
@@ -33,7 +33,6 @@ setup(
         # 'Development Status :: 7 - Inactive'
         'Environment :: Web Environment',
         'Framework :: Django',
-        'Framework :: Django :: 1.10',
         'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.0',
         'Framework :: Django :: 2.1',
@@ -43,10 +42,10 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        # 'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Topic :: Communications :: Email',
     ],
 )
