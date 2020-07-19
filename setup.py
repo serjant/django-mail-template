@@ -10,17 +10,20 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django_mail_template',
-    version='0.1.6',
+    version='0.1.7',
     packages=find_packages(),
     include_package_data=True,
-    license='MIT License',
+    license='BSD License',
     description='Application for creating mails templates with context '
                 'variables. There is a double mapping between a mail template '
                 'and process configuration so is possible to change used '
                 'mail template of a process at run time.',
+    install_requires=[
+          'django-ckeditor',
+    ],
     long_description=README,
     long_description_content_type='text/markdown',
-    url='',
+    url='https://github.com/django-mail-template/master',
     author='Vicente Ramos Garcia',
     author_email='vramosga@gmail.com',
     classifiers=[
@@ -39,7 +42,7 @@ setup(
         'Framework :: Django :: 2.2',
         'Framework :: Django :: 3.0',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.5',

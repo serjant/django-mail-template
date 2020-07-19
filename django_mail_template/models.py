@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import gettext
+from ckeditor.fields import RichTextField
 from django_mail_template.tools import (replace_context_variable,
                                         clean_address_list)
 
@@ -36,17 +37,11 @@ class MailTemplate(models.Model):
         verbose_name=_('Subject'), max_length=140,
         help_text=_('Subject text for the mail. Context variable can be used.')
     )
-    try:
-        from ckeditor.fields import RichTextField
-        body = RichTextField(
-            verbose_name=_('Body'), blank=True, null=True, max_length=5000,
-            help_text=_('The content of the mail. Context variable can be '
-                        'used.'))
-    except ImportError:
-        body = models.TextField(
-            verbose_name=_('Body'), blank=True, null=True, max_length=5000,
-            help_text=_('The content of the mail. Context variable can be '
-                        'used.'))
+
+    body = RichTextField(
+        verbose_name=_('Body'), blank=True, null=True, max_length=5000,
+        help_text=_('The content of the mail. Context variable can be '
+                    'used.'))
 
     #: Field with email's reply to.
     reply_to = models.CharField(
