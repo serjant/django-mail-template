@@ -1,4 +1,10 @@
-# Django mail template
+![Django roles access](https://django-mail-template.github.io/_images/django-mail-template.png "Django mail template")  
+# Django Mail Template
+![](https://img.shields.io/badge/release-v0.1.7-blue.svg)
+![](https://img.shields.io/badge/state-production-brightgreen.svg)
+[![Build Status](https://travis-ci.org/django-mail-template/master.svg?branch=master)](https://travis-ci.org/django-mail-template/master)
+[![codecov](https://codecov.io/gh/django-mail-template/master/branch/master/graph/badge.svg)](https://codecov.io/gh/django-mail-template/master)
+
 
 A very simple Django application for:
 
@@ -34,13 +40,13 @@ interface*.
 
 #### Works with:
 
-* Django 1.10+ (Python 3.5+)
+* Django 1.11+ (Python 3.5+)
 
 * Django 2+ (Python 3.5+)
 
 * Django 3+ (Python 3.5+)
 
-* [Documentation](https://django-roles-access.github.io)
+* [Documentation](https://django-mail-template.github.io)
 
 
 ## Requirements
@@ -49,30 +55,13 @@ interface*.
 django.core.mail (
 [Django email](https://docs.djangoproject.com/en/dev/topics/email/)).
 
-2) ``django_mail_template`` uses *Django admin interface*, check official
+2) ``django_mail_template`` uses *Django admin site*, check official
 documentation for it's requirements:
 [Django admin site](https://docs.djangoproject.com/en/dev/ref/contrib/admin/).
 
-
-COMPLETAR ESTO
-
-'APP_DIRS': True
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
-
+3) ``django_mail_template`` uses 
+[Django CKEditor](https://github.com/django-ckeditor/django-ckeditor) to let write rich text
+MailTeamplate.
 
 
 ## Quick start
@@ -81,22 +70,28 @@ TEMPLATES = [
 ### Installation and configuration
 
 
-1. Install **django_mail_template** from pypi:
+1. Install `django_mail_template` from pypi:
 ```
     pip install django-mail-template
 ```
 
-2. Add **'django_mail_template'** to your INSTALLED_APPS setting:
+2. Add `'django_mail_template'` and `'ckeditor'` to your `INSTALLED_APPS` setting:
 ```    
     INSTALLED_APPS = [
         ...
-        'django_mail_template.apps.DjangoMailTemplateConfig',
+        'ckeditor'
+        'django_mail_template',
     ]
 ```
     
 3. Run migrations to create **django_mail_template** models:
 ```
     python manage.py migrate
+```
+
+4. Run the collectstatic management command:
+```
+    python manage.py collectstatic
 ```
 
 ### Use Django Mail Template
@@ -106,7 +101,8 @@ You can simple use ``django_mail_template`` to send mails:
 ```
     from django_mail_template.models import MailTemplate
 
-    mail_template = MailTemplate(from="a@b.com", to=["b@b.com"],
+    mail_template = MailTemplate(title="A mail Title", from="a@b.com",
+                                 to="b@b.com",
                                  subject="Django Mail Template quick start.")
     mail_template.send()
 ```
@@ -118,7 +114,8 @@ replacement with Python string format:
     from django_mail_template.models import MailTemplate
 
     ...
-    mail_template, created = MailTemplate.objects.get_or_create(
+    mail_template = MailTemplate.create(
+        title="First mail template",
         from="a@b.com",
         subject="Hello {client}.",
         body="Dear {client}: We are delivering your {product}."
@@ -131,31 +128,43 @@ replacement with Python string format:
 ```
 
 Administrative users can create or edit ``MailTemplate`` using *Django admin
-interface* and redact text using Python string format.
+site* and redact text using Python string format.
 
 #### 3. Indirect use
 Is also possible to use an indirect call through ``Configuration`` data model.
+In *Django admin site* (or by code) you can create:
+```
+    a_mail_template_greeting = MailTemplate.objects.create(
+        title="First mail template",
+        from="a@b.com",
+        subject="Hello {client}.",
+        body="Dear {client}: We wish you {greeting}.")
+
+    configuration = Configuration.objects.create(
+        process="clients_greeting",
+        mail_template=a_mail_template_greeting
+    )
+```
+
+Then in code
+
 ```
     from django_mail_template.models import Configuration
 
-    configuration, created = Configuration.objects.get_or_create(
-        process="process_name"
-    )
-    if configuration.mail_template:
-        mail_template.send()
+    mail_template = Configuration.get_mail_template("clients_greeting")
+    # Cycle through clients
+        mail_template.to = client.email
+        mail_template.send({"client": client.name,
+                            "greeting": "A great mew year!!!"})
 ```
 
-The upper case requires a ``Configuration``'s instance with "process_name" as
-process field value and a ``MailTemplate``'s instance mapped to Configuration's
-instance. Both instance can be created using *Django admin interface*.
 
-4. Django admin interface
--------------------------
+#### 4. Django admin interface
 
 When ``django_mail_template`` is installed, and migrations applied, *Django
-admin interface* will expose to administrative users a new section with title
+admin site* will expose to administrative users a new section with title
 *Django Mail Template*. User can manage ``MailTempaltes`` and 
-``Configurations`` from here:
+``Configurations`` from there:
 
 * ``MailTemplate``: Users can redact mails (create, edit, delete).
 
@@ -163,19 +172,10 @@ admin interface* will expose to administrative users a new section with title
   administrative users can change mapped *MailTemplate* to use new mail
   template without changing code.
 
+* Test created *mail templates*
 
 
-Code example
-
-```
-    from django_roles_access.mixin import RolesMixin
-
-    class MyView(RolesMixin, View):
-
-        ...
-```
-
-## Test Django mail template
+## More about Django mail template
 
 You can check the **django_mail_template** test execution at 
 [Travis CI integration](https://travis-ci.org/django-mail-template/master)
