@@ -2,7 +2,7 @@
 # Django Mail Template
 ![](https://img.shields.io/badge/release-v0.1.7-blue.svg)
 ![](https://img.shields.io/badge/state-production-brightgreen.svg)
-[![Build Status](https://travis-ci.org/django-mail-template/master.svg?branch=master)](https://travis-ci.org/django-mail-template/master)
+[![Build Status](https://travis-ci.org/Django-Mail-Template/master.svg?branch=master)](https://travis-ci.org/Django-Mail-Template/master)
 [![codecov](https://codecov.io/gh/django-mail-template/master/branch/master/graph/badge.svg)](https://codecov.io/gh/django-mail-template/master)
 
 
