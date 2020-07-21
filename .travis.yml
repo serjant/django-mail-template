@@ -6,6 +6,5 @@ python:
   - "3.8"
 os:
   - linux
-  - osx
 install: ['pip install tox-travis tox pytest pytest-django pytest-cov django-ckeditor']
 script: ['tox']
