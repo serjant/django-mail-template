@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-15 16:33-0500\n"
+"POT-Creation-Date: 2020-07-21 17:17-0500\n"
 "Last-Translator: Vicente Ramos Garcia <vramosga@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -31,15 +31,15 @@ msgstr ""
 "contextocomo se espera: \"{{variable{{\" y \"}}variable}}\" ambos usos son "
 "incorrectos. El detalle del error: {} ({})."
 
-#: django_mail_template/admin.py:35
+#: django_mail_template/admin.py:36
 msgid "MailTemplate {}: Gives an error when trying to send it: {} ({})."
 msgstr "MailTemplate {}: Dio un error al intentar ser enviado: {} ({})."
 
-#: django_mail_template/admin.py:40
+#: django_mail_template/admin.py:41
 msgid "Amount of sent mails: {}."
 msgstr "Cantidad de correos enviados: {}."
 
-#: django_mail_template/admin.py:43 tests/test_admin.py:53
+#: django_mail_template/admin.py:44 tests/test_admin.py:53
 msgid "Test mails templates"
 msgstr "Probar plantillas de correo"
 
@@ -47,28 +47,28 @@ msgstr "Probar plantillas de correo"
 msgid "Django Mail Template"
 msgstr "Plantilla de correo para Django"
 
-#: django_mail_template/models.py:25 tests/test_models.py:54
+#: django_mail_template/models.py:15 tests/test_models.py:54
 msgid "Title"
 msgstr "Título"
 
-#: django_mail_template/models.py:26 tests/test_models.py:58
+#: django_mail_template/models.py:16 tests/test_models.py:58
 msgid "A title to identify the mail template."
 msgstr "Un título para identificar la plantilla de correo."
 
-#: django_mail_template/models.py:29 django_mail_template/models.py:72
+#: django_mail_template/models.py:19 django_mail_template/models.py:64
 #: tests/test_models.py:72
 msgid "To"
 msgstr "Para"
 
-#: django_mail_template/models.py:30 tests/test_models.py:78
+#: django_mail_template/models.py:20 tests/test_models.py:78
 msgid "A list with email addresses separated with coma."
 msgstr "Una lista con las direcciones de destino separadas por coma."
 
-#: django_mail_template/models.py:34 tests/test_models.py:93
+#: django_mail_template/models.py:24 tests/test_models.py:93
 msgid "Copy to"
 msgstr "Copiar a"
 
-#: django_mail_template/models.py:35 tests/test_models.py:99
+#: django_mail_template/models.py:25 tests/test_models.py:99
 msgid ""
 "A list with email addresses separated with coma to be used in the \"Cc\" "
 "header."
@@ -76,12 +76,12 @@ msgstr ""
 "Una lista con las direcciones de destino separadas por coma para ser "
 "utilizadas en el campo \"Copiar a\" de la cabezera del mensaje."
 
-#: django_mail_template/models.py:39 django_mail_template/models.py:76
+#: django_mail_template/models.py:29 django_mail_template/models.py:68
 #: tests/test_models.py:124
 msgid "Blind copy"
 msgstr "Copia oculta"
 
-#: django_mail_template/models.py:40 tests/test_models.py:130
+#: django_mail_template/models.py:30 tests/test_models.py:130
 msgid ""
 "A list with email addresses separated with coma to be used in the \"Bcc\" "
 "header."
@@ -89,37 +89,37 @@ msgstr ""
 "Una lista con las direcciones de destino separadas por coma para ser "
 "utilizadas en el campo \"Copia oculta\" de la cabezera del mensaje."
 
-#: django_mail_template/models.py:44 tests/test_models.py:163
+#: django_mail_template/models.py:34 tests/test_models.py:163
 msgid "From"
 msgstr "De"
 
-#: django_mail_template/models.py:44 tests/test_models.py:168
+#: django_mail_template/models.py:34 tests/test_models.py:168
 msgid "Sender's email address."
 msgstr "Dirección de correo del emisor."
 
-#: django_mail_template/models.py:47 tests/test_models.py:213
+#: django_mail_template/models.py:37 tests/test_models.py:213
 msgid "Subject"
 msgstr "Asunto"
 
-#: django_mail_template/models.py:48 tests/test_models.py:218
+#: django_mail_template/models.py:38 tests/test_models.py:218
 msgid "Subject text for the mail. Context variable can be used."
 msgstr ""
 "Texto para el asunto del correo. Variables de contexto pueden ser usadas."
 
-#: django_mail_template/models.py:51 tests/test_models.py:224
+#: django_mail_template/models.py:42 tests/test_models.py:224
 msgid "Body"
 msgstr "Mensaje"
 
-#: django_mail_template/models.py:52 tests/test_models.py:229
+#: django_mail_template/models.py:43 tests/test_models.py:229
 msgid "The content of the mail. Context variable can be used."
 msgstr "Contenido del correo. Variables de contexto pueden ser usadas."
 
-#: django_mail_template/models.py:56 django_mail_template/models.py:78
+#: django_mail_template/models.py:48 django_mail_template/models.py:70
 #: tests/test_models.py:173
 msgid "Reply to"
 msgstr "Responder a"
 
-#: django_mail_template/models.py:57 tests/test_models.py:179
+#: django_mail_template/models.py:49 tests/test_models.py:179
 msgid ""
 "A list with email addresses separated with coma to be used in the \"Reply-To"
 "\" header."
@@ -127,32 +127,53 @@ msgstr ""
 "Una lista con las direcciones de destino separadas por coma para ser "
 "utilizadas en el campo \"Responder a\" de la cabezera del mensaje."
 
-#: django_mail_template/models.py:60 django_mail_template/models.py:132
-#: tests/test_models.py:244 tests/test_models.py:384
+#: django_mail_template/models.py:52 django_mail_template/models.py:130
+#: tests/test_models.py:244 tests/test_models.py:407
 msgid "Description"
 msgstr "Descripción"
 
-#: django_mail_template/models.py:61 tests/test_models.py:250
+#: django_mail_template/models.py:53 tests/test_models.py:250
 msgid "Description of the mail template."
 msgstr "Descripción de la plantilla de correo."
 
-#: django_mail_template/models.py:64 tests/test_models.py:33
+#: django_mail_template/models.py:56 tests/test_models.py:33
 msgid "Mail Template"
 msgstr "Plantilla de correo"
 
-#: django_mail_template/models.py:65 tests/test_models.py:37
+#: django_mail_template/models.py:57 tests/test_models.py:37
 msgid "Mails Templates"
 msgstr "Plantillas de correos"
 
-#: django_mail_template/models.py:74
+#: django_mail_template/models.py:66
 msgid "Copy"
 msgstr "Copiar"
 
-#: django_mail_template/models.py:104
+#: django_mail_template/models.py:96
 msgid "The argument for send method must be a mapping."
 msgstr "El argumento para el método send debe ser un mapeo."
 
-#: django_mail_template/models.py:133 tests/test_models.py:390
+#: django_mail_template/models.py:119 tests/test_models.py:357
+msgid "Process"
+msgstr ""
+
+#: django_mail_template/models.py:120 tests/test_models.py:361
+msgid "A name to identify the process."
+msgstr "Un nombre para identificar el proceso."
+
+#: django_mail_template/models.py:123 tests/test_models.py:375
+msgid "Mail template"
+msgstr "Plantilla de correo"
+
+#: django_mail_template/models.py:125 tests/test_models.py:379
+msgid ""
+"The mail template linked with this configuration (process). When required a "
+"mail template to this configurations this mail template will be returned."
+msgstr ""
+"La plantilla de correo vinculada con esta configuración (proceso). Cuando se "
+"requiera una plantilla de correo a esta configuraciíon esta plantilla de "
+"correo será devuelta."
+
+#: django_mail_template/models.py:131 tests/test_models.py:413
 msgid ""
 "Description for configuration. This description can contain the contextual "
 "variables that are expected to be used in associated MailTemplates."
@@ -161,15 +182,15 @@ msgstr ""
 "dejar constancia de las variables de contexto que pueden ser usadas en las "
 "plantillas de correo asociadas con esta configuración."
 
-#: django_mail_template/models.py:138 tests/test_models.py:330
+#: django_mail_template/models.py:136 tests/test_models.py:330
 msgid "Configuration"
 msgstr "Configuración"
 
-#: django_mail_template/models.py:139 tests/test_models.py:334
+#: django_mail_template/models.py:137 tests/test_models.py:334
 msgid "Configurations"
 msgstr "Configuraciones"
 
-#: django_mail_template/models.py:146 tests/test_models.py:364
+#: django_mail_template/models.py:144 tests/test_models.py:387
 msgid "No mail template"
 msgstr "Sin plantilla de correo"
 
@@ -223,7 +244,7 @@ msgstr "Hello {test}"
 msgid "Test text using {test}"
 msgstr "Test text using {test}"
 
-#: tests/test_models.py:375
+#: tests/test_models.py:398
 msgid "PROCESS_ID - Title for mail template"
 msgstr "PROCESS_ID - Title for mail template"
 

@@ -28,7 +28,8 @@ class MailTemplateAdmin(admin.ModelAdmin):
                                 'subject and body uses context variables as '
                                 'expected: "{{variable{{" and "}}variable}}" '
                                 'are both wrong use. The error detail: {} '
-                                '({}).').format(mail_template.title, str(e), type(e))
+                                '({}).').format(mail_template.title, str(e),
+                                                type(e))
                     self.message_user(request, err_msg, messages.ERROR)
                 except Exception as e:
                     # Catch any exception as it is a test.

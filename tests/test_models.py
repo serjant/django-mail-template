@@ -325,11 +325,11 @@ class TestConfiguration(UnitTestCase):
             process='PROCESS_ID'
         )
 
-    def test_mail_template_verbose_name(self):
+    def test_configuration_verbose_name(self):
         verbose_name = Configuration._meta.verbose_name
         assert verbose_name == _('Configuration')
 
-    def test_mail_template_plural_name(self):
+    def test_configuration_plural_name(self):
         verbose_name = Configuration._meta.verbose_name_plural
         assert verbose_name == _('Configurations')
 
@@ -352,6 +352,16 @@ class TestConfiguration(UnitTestCase):
         self.configuration.process = data_ok
         self.configuration.full_clean()
 
+    def test_process_verbose_name(self):
+        field = Configuration._meta.get_field('process')
+        self.assertEqual(field.verbose_name, _("Process"))
+
+    def test_process_field_help_text(self):
+        expected_help_text = \
+            _('A name to identify the process.')
+        actual_help_text = Configuration._meta.get_field('process').help_text
+        self.assertEqual(expected_help_text, actual_help_text)
+
     def test_mail_template_field_type(self):
         field = Configuration._meta.get_field('mail_template')
         assert isinstance(field, models.ForeignKey)
@@ -359,6 +369,19 @@ class TestConfiguration(UnitTestCase):
     def test_mail_template_filed_point_to_right_data_model(self):
         field = Configuration._meta.get_field('mail_template')
         assert field.related_model == MailTemplate
+
+    def test_mail_template_verbose_name(self):
+        field = Configuration._meta.get_field('mail_template')
+        self.assertEqual(field.verbose_name, _("Mail template"))
+
+    def test_mail_template_field_help_text(self):
+        expected_help_text = \
+            _('The mail template linked with this configuration (process). '
+              'When required a mail template to this configurations this '
+              'mail template will be returned.')
+        actual_help_text = Configuration._meta.get_field(
+            'mail_template').help_text
+        self.assertEqual(expected_help_text, actual_help_text)
 
     def test_configuration_string_without_mail_template(self):
         expected_text = 'PROCESS_ID - ' + _('No mail template')

@@ -115,10 +115,16 @@ class MailTemplate(models.Model):
 
 class Configuration(models.Model):
 
-    process = models.CharField(max_length=200)
+    process = models.CharField(
+        verbose_name=_("Process"), max_length=200,
+        help_text=_("A name to identify the process."))
 
-    mail_template = models.ForeignKey(MailTemplate, on_delete=models.SET_NULL,
-                                      null=True, blank=True)
+    mail_template = models.ForeignKey(
+        MailTemplate, verbose_name=_("Mail template"),
+        on_delete=models.SET_NULL, null=True, blank=True,
+        help_text=_("The mail template linked with this configuration "
+                    "(process). When required a mail template to this "
+                    "configurations this mail template will be returned."))
 
     description = models.TextField(
         verbose_name=_("Description"), blank=True, null=True,
