@@ -13,7 +13,7 @@ setup(
     version='0.1.7',
     packages=find_packages(),
     include_package_data=True,
-    license='BSD License',
+    license='BSD 3-clause',
     description='Application for creating mails templates with context '
                 'variables. There is a double mapping between a mail template '
                 'and process configuration so is possible to change used '
