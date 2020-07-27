@@ -1,11 +1,11 @@
 # Change Log
-## [v0.1.9] - 2020-07-15
+## [v0.1.9] - 2020-07-27
 
 ### Changed
 
 - Body field restriction on maximum number of characters is removed.
 
-## [v0.1.8] - 2020-07-15
+## [v0.1.8] - 2020-07-21
 
 ### Added
 
@@ -13,7 +13,7 @@
 
 - Add content to LICENSE file.
 
-## [v0.1.7] - 2020-07-15
+## [v0.1.7] - 2020-07-21
 
 ### Added
 
