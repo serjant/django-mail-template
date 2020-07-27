@@ -1,4 +1,30 @@
 # Change Log
+## [v0.1.9] - 2020-07-15
+
+### Changed
+
+- Body field restriction on maximum number of characters is removed.
+
+## [v0.1.8] - 2020-07-15
+
+### Added
+
+- Add elements for translation.
+
+- Add content to LICENSE file.
+
+## [v0.1.7] - 2020-07-15
+
+### Added
+
+- Travis CI Configuration
+
+### Changed
+
+- README.md is updated for publication
+
+- Remove comments from models files.
+
 ## [v0.1.6] - 2020-07-15
 
 ### Added
