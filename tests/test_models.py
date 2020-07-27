@@ -1,5 +1,4 @@
 # -*- coding: UTF-8 -*-
-from smtplib import SMTPException
 from unittest.mock import patch, call
 
 import pytest
@@ -234,6 +233,14 @@ class TestMailTemplate(UnitTestCase):
     def test_body_field_type(self):
         field = MailTemplate._meta.get_field('body')
         assert isinstance(field, models.TextField)
+
+    def test_body_field_max_length(self):
+        """
+        Just a test to check it can hold at least 50000 characters
+        """
+        big_body = 'chars' * 10000 + 'exceed'
+        self.mail.body = big_body
+        self.mail.full_clean()
 
     def test_description_field_type(self):
         field = MailTemplate._meta.get_field('description')

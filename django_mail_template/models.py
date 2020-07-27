@@ -39,7 +39,7 @@ class MailTemplate(models.Model):
     )
 
     body = RichTextField(
-        verbose_name=_('Body'), blank=True, null=True, max_length=5000,
+        verbose_name=_('Body'), blank=True, null=True,
         help_text=_('The content of the mail. Context variable can be '
                     'used.'))
 
