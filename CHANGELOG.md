@@ -1,4 +1,11 @@
 # Change Log
+## [v0.1.11] - 2020-07-30
+
+### Added
+
+- Add translation files not included in previous releases now: english and 
+ spanish.
+
 ## [v0.1.10] - 2020-07-30
 
 ### Changed
