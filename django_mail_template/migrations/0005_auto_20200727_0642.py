@@ -14,6 +14,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='mailtemplate',
             name='body',
-            field=ckeditor.fields.RichTextField(blank=True, help_text='The content of the mail. Context variable can be used.', null=True, verbose_name='Body'),
+            field=ckeditor.fields.RichTextField(
+                blank=True,
+                help_text='The content of the mail. Context variable can '
+                          'be used.', null=True, verbose_name='Body'),
         ),
     ]

@@ -1,4 +1,12 @@
 # Change Log
+## [v0.1.10] - 2020-07-30
+
+### Changed
+
+- Fix code quality with migration file.
+
+- Add translation to Configuration model.
+
 ## [v0.1.9] - 2020-07-27
 
 ### Changed
