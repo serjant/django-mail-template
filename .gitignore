@@ -20,3 +20,6 @@ dist/
 
 html_cov
 tmp
+.codacy-coverage
+coverage.json.old
+coverage.xml

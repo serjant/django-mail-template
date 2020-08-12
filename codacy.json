@@ -1,0 +1,28 @@
+{
+    "total": 91,
+    "fileReports": [
+        {
+            "filename": "awesome/__init__.py",
+            "total": 75,
+            "coverage": {
+                "1": 1,
+                "2": 1,
+                "4": 1,
+                "5": 0
+            }
+        },
+        {
+            "filename": "tests.py",
+            "total": 100,
+            "coverage": {
+                "1": 1,
+                "3": 1,
+                "6": 1,
+                "7": 1,
+                "8": 1,
+                "11": 1,
+                "12": 1
+            }
+        }
+    ]
+}
