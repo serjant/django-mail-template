@@ -2,6 +2,7 @@
 # Django Mail Template
 ![](https://img.shields.io/badge/release-v0.1.7-blue.svg)
 ![](https://img.shields.io/badge/state-production-brightgreen.svg)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/cddafa13d5fe4dbead4819e1a559c144)](https://app.codacy.com/gh/Django-Mail-Template/master?utm_source=github.com&utm_medium=referral&utm_content=Django-Mail-Template/master&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.org/Django-Mail-Template/master.svg?branch=master)](https://travis-ci.org/Django-Mail-Template/master)
 [![codecov](https://codecov.io/gh/django-mail-template/master/branch/master/graph/badge.svg)](https://codecov.io/gh/django-mail-template/master)
 
