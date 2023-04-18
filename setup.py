@@ -19,7 +19,7 @@ setup(
                 'and process configuration so is possible to change used '
                 'mail template of a process at run time.',
     install_requires=[
-          'django-ckeditor',
+          'django-ckeditor==6.0.0',
     ],
     long_description=README,
     long_description_content_type='text/markdown',
